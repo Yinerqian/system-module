@@ -82,8 +82,8 @@ public class OAuthService {
     /**
      * 生成权限树(利用指针指向内存空间的原理)
      *
-     * @param allPermissionGroups    所有权限分组 List
-     * @param userPermissionMap      用户具体权限
+     * @param allPermissionGroups 所有权限分组 List
+     * @param userPermissionMap   用户具体权限
      * @return 权限树
      */
     private List<PermissionGroupDTO> generateGroupTree(List<PermissionGroup> allPermissionGroups, Map<String, List<Permission>> userPermissionMap) {
@@ -93,38 +93,31 @@ public class OAuthService {
         PermissionGroupDTO parentNode = new PermissionGroupDTO();
         parentNode.setGroupId(SystemConstants.NO_PARENT_PERMISSION_GROUP);
         map.put(SystemConstants.NO_PARENT_PERMISSION_GROUP, parentNode);
+
+        // 初始化 Map
+        allPermissionGroups.forEach(permissionGroup -> map.put(permissionGroup.getGroupId(), convertPermissionGroup2DTO(permissionGroup)));
+
         // 通过 Map 生成树结构
         allPermissionGroups.forEach(permissionGroup -> {
-            // 当前节点数据初始化
-            PermissionGroupDTO permissionGroupDTO = new PermissionGroupDTO();
-            BeanUtils.copyProperties(permissionGroup, permissionGroupDTO);
             // 设置具体权限菜单
-            List<Permission> permissions = userPermissionMap.get(permissionGroupDTO.getGroupId());
+            List<Permission> permissions = userPermissionMap.get(permissionGroup.getGroupName());
             if (CollectionUtil.isNotEmpty(permissions)) {
-                permissionGroupDTO.setPermissionList(permissions);
+                map.get(permissionGroup.getGroupId()).setPermissionList(permissions);
             }
 
-            // 若 map 中没有当前元素，添加并初始化
-            if (map.containsKey(permissionGroup.getGroupId())) {
-                map.put(permissionGroup.getGroupId(), permissionGroupDTO);
-            }
+            // 查找父元素，存在则将该元素插入到 children
             if (map.containsKey(permissionGroup.getParentGroupId())) {
-                // 查找父元素，存在则将该元素插入到 children
-                map.get(permissionGroup.getParentGroupId()).getChildren().add(permissionGroupDTO);
-            } else {
-                // 否则初始化父元素，并插入 children
-                allPermissionGroups.stream()
-                        .filter(_permissionGroup -> _permissionGroup.getGroupId().equals(permissionGroup.getParentGroupId()))
-                        .findFirst()
-                        .ifPresent(_permissionGroup -> {
-                            PermissionGroupDTO _permissionGroupDTO = new PermissionGroupDTO();
-                            BeanUtils.copyProperties(_permissionGroup, _permissionGroupDTO);
-                            _permissionGroupDTO.setChildren(new ArrayList<>(Collections.singleton(permissionGroupDTO)));
-                            map.put(permissionGroup.getParentGroupId(), _permissionGroupDTO);
-                        });
+                map.get(permissionGroup.getParentGroupId()).getChildren().add(map.get(permissionGroup.getGroupId()));
             }
         });
         return map.get(SystemConstants.NO_PARENT_PERMISSION_GROUP).getChildren();
     }
+
+    private PermissionGroupDTO convertPermissionGroup2DTO(PermissionGroup permissionGroup) {
+        PermissionGroupDTO permissionGroupDTO = new PermissionGroupDTO();
+        BeanUtils.copyProperties(permissionGroup, permissionGroupDTO);
+        return permissionGroupDTO;
+    }
+
 
 }
