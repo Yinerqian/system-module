@@ -1,20 +1,22 @@
 package com.celi.system.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import com.celi.system.constant.SystemConstants;
 import com.celi.system.dao.UserRepository;
+import com.celi.system.dto.PermissionGroupDTO;
 import com.celi.system.entity.*;
 import com.celi.system.enums.ServiceCode;
 import com.celi.system.exception.AuthenticationException;
 import com.celi.system.utils.DateUtils;
 import com.celi.system.utils.PwdSecurityKey;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +32,8 @@ public class OAuthService {
     private UserRoleService UserRoleService;
     @Resource
     private PermissionService PermissionService;
+    @Resource
+    private PermissionGroupService permissionGroupService;
     @Resource
     private RolePermissionService RolePermissionService;
 
@@ -52,7 +56,7 @@ public class OAuthService {
         return userInfo;
     }
 
-    public List<PermissionGroup> userPermissionByGroup() {
+    public List<PermissionGroupDTO> userPermissionByGroup() {
         String userId = StpUtil.getLoginIdAsString();
         List<UserRole> userRoles = UserRoleService.findRoleIds(userId);
         if (CollectionUtils.isEmpty(userRoles)) {
@@ -65,18 +69,62 @@ public class OAuthService {
         if (CollectionUtils.isEmpty(rolePermissions)) {
             throw new AuthenticationException("用户未配置权限，请联系管理员");
         }
+        // 查询权限分组
+        List<PermissionGroup> allPermissionGroups = permissionGroupService.findAll();
         // 查询权限列表
         List<Permission> userPermissions = PermissionService.queryPermissionsByIds(rolePermissions.stream()
                 .map(RolePermission::getPermissionId).collect(Collectors.toList()));
         Map<String, List<Permission>> userPermissionMap = userPermissions.stream().collect(Collectors.groupingBy(Permission::getGroupName));
-        List<PermissionGroup> permissionGroups = new ArrayList<>();
-        userPermissionMap.forEach((groupName, permissions) -> {
-            PermissionGroup PermissionGroup = new PermissionGroup();
-            PermissionGroup.setPermissionList(permissions);
-            PermissionGroup.setGroupName(groupName);
-            permissionGroups.add(PermissionGroup);
+        // 返回树状数组
+        return generateGroupTree(allPermissionGroups, userPermissionMap);
+    }
+
+    /**
+     * 生成权限树(利用指针指向内存空间的原理)
+     *
+     * @param allPermissionGroups    所有权限分组 List
+     * @param userPermissionMap      用户具体权限
+     * @return 权限树
+     */
+    private List<PermissionGroupDTO> generateGroupTree(List<PermissionGroup> allPermissionGroups, Map<String, List<Permission>> userPermissionMap) {
+        // 生成 map 存储元素
+        Map<String, PermissionGroupDTO> map = new HashMap<>();
+        // 设置顶层节点
+        PermissionGroupDTO parentNode = new PermissionGroupDTO();
+        parentNode.setGroupId(SystemConstants.NO_PARENT_PERMISSION_GROUP);
+        map.put(SystemConstants.NO_PARENT_PERMISSION_GROUP, parentNode);
+        // 通过 Map 生成树结构
+        allPermissionGroups.forEach(permissionGroup -> {
+            // 当前节点数据初始化
+            PermissionGroupDTO permissionGroupDTO = new PermissionGroupDTO();
+            BeanUtils.copyProperties(permissionGroup, permissionGroupDTO);
+            // 设置具体权限菜单
+            List<Permission> permissions = userPermissionMap.get(permissionGroupDTO.getGroupId());
+            if (CollectionUtil.isNotEmpty(permissions)) {
+                permissionGroupDTO.setPermissionList(permissions);
+            }
+
+            // 若 map 中没有当前元素，添加并初始化
+            if (map.containsKey(permissionGroup.getGroupId())) {
+                map.put(permissionGroup.getGroupId(), permissionGroupDTO);
+            }
+            if (map.containsKey(permissionGroup.getParentGroupId())) {
+                // 查找父元素，存在则将该元素插入到 children
+                map.get(permissionGroup.getParentGroupId()).getChildren().add(permissionGroupDTO);
+            } else {
+                // 否则初始化父元素，并插入 children
+                allPermissionGroups.stream()
+                        .filter(_permissionGroup -> _permissionGroup.getGroupId().equals(permissionGroup.getParentGroupId()))
+                        .findFirst()
+                        .ifPresent(_permissionGroup -> {
+                            PermissionGroupDTO _permissionGroupDTO = new PermissionGroupDTO();
+                            BeanUtils.copyProperties(_permissionGroup, _permissionGroupDTO);
+                            _permissionGroupDTO.setChildren(new ArrayList<>(Collections.singleton(permissionGroupDTO)));
+                            map.put(permissionGroup.getParentGroupId(), _permissionGroupDTO);
+                        });
+            }
         });
-        return permissionGroups;
+        return map.get(SystemConstants.NO_PARENT_PERMISSION_GROUP).getChildren();
     }
 
 }

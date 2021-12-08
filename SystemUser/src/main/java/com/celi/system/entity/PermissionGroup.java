@@ -24,6 +24,10 @@ public class PermissionGroup extends BaseCreateBy {
     @Column(name = "GROUP_NAME")
     private String groupName;
 
+    // 父分组 id
+    @Column(name = "PARENT_GROUP_ID")
+    private String parentGroupId = "0";
+
     // 排序
     @Transient
     private Integer sort;

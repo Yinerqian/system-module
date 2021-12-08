@@ -3,6 +3,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <name>maven-snapshots-repository</name>
+            <url>http://192.168.1.205:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>maven-releases</id>
+            <name>maven-releases-repository</name>
+            <url>http://192.168.1.205:8081/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+
     <groupId>com.celi</groupId>
     <artifactId>system-parent</artifactId>
     <version>1.1-SNAPSHOT</version>

@@ -25,13 +25,17 @@ public class PermissionGroupService {
     }
 
     public List<PermissionGroup> findAll(String groupName) {
-        List<PermissionGroup> allByGroupNameContaining = null ;
+        List<PermissionGroup> allByGroupNameContaining = null;
         if (groupName != null) {
-           allByGroupNameContaining = permissionGroupRepository.findAllByGroupNameContaining(groupName);
-           return allByGroupNameContaining;
+            allByGroupNameContaining = permissionGroupRepository.findAllByGroupNameContaining(groupName);
+            return allByGroupNameContaining;
         }
         allByGroupNameContaining = permissionGroupRepository.findAll();
         return allByGroupNameContaining;
+    }
+
+    public List<PermissionGroup> findAll() {
+        return permissionGroupRepository.findAll();
     }
 
     public int savePermissionGroupInfo(PermissionGroup sysPermissionGroup, String userId) {
