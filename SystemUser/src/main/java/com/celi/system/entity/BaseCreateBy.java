@@ -18,10 +18,10 @@ public class BaseCreateBy {
     public static final Integer UN_DELETED = 0;
 
 
-    @Column(name = "CREATED_BY")
+    @Column(name = "CREATED_BY", columnDefinition = "varchar(32)")
     protected String createdBy;
 
-    @Column(name = "CREATED_BY_NAME")
+    @Column(name = "CREATED_BY_NAME", columnDefinition = "varchar(200)")
     @Transient
     protected String createdByName;
 
@@ -29,10 +29,10 @@ public class BaseCreateBy {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createdTime;
 
-    @Column(name = "UPDATED_BY")
+    @Column(name = "UPDATED_BY", columnDefinition = "varchar(32)")
     protected String updatedBy;
 
-    @Column(name = "UPDATED_BY_NAME")
+    @Column(name = "UPDATED_BY_NAME", columnDefinition = "varchar(200)")
     @Transient
     protected String updatedByName;
 
