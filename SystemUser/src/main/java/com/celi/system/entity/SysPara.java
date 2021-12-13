@@ -1,5 +1,6 @@
 package com.celi.system.entity;
 
+import com.celi.system.enums.SysParaConvert;
 import com.celi.system.enums.SysParaEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -19,9 +20,8 @@ public class SysPara extends BaseCreateBy{
      * 参数id
      */
     @Id
-    @Column(name = "PARA_ID", columnDefinition = "int(11)")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer paraId;
+    @Column(name = "PARA_ID", columnDefinition = "varchar(32)")
+    private String paraId;
 
     /**
      * 参数名称
@@ -44,6 +44,7 @@ public class SysPara extends BaseCreateBy{
     /**
      * 参数类型，Number | Boolean | String
      */
+    @Convert(converter = SysParaConvert.class)
     @Column(name = "PARA_TYPE", columnDefinition = "varchar(20)")
     private SysParaEnum paraType;
 

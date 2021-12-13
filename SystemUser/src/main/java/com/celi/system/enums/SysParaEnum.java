@@ -3,6 +3,8 @@ package com.celi.system.enums;
 import com.celi.system.dto.BaseEnum;
 import lombok.Getter;
 
+import java.util.Objects;
+
 /**
  * 系统参数 参数类型
  */
@@ -43,4 +45,13 @@ public enum SysParaEnum implements BaseEnum {
         this.desc = desc;
     }
 
+    //获取枚举实例
+    public static SysParaEnum fromValue(String value) {
+        for (SysParaEnum statusEnum : SysParaEnum.values()) {
+            if (Objects.equals(value, statusEnum.getCode())) {
+                return statusEnum;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
 }

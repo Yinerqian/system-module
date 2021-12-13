@@ -1,5 +1,6 @@
 package com.celi.system.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.celi.system.dao.PermissionGroupRepository;
 import com.celi.system.entity.PermissionGroup;
 import com.celi.system.utils.DateUtils;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class PermissionGroupService {
@@ -39,7 +39,7 @@ public class PermissionGroupService {
     }
 
     public int savePermissionGroupInfo(PermissionGroup sysPermissionGroup, String userId) {
-        sysPermissionGroup.setGroupId(UUID.randomUUID().toString());
+        sysPermissionGroup.setGroupId(IdUtil.simpleUUID());
         sysPermissionGroup.setCreatedBy(userId);
         sysPermissionGroup.setUpdatedBy(userId);
         sysPermissionGroup.setUpdatedTime(DateUtils.now());

@@ -1,6 +1,7 @@
 package com.celi.system.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.celi.system.dao.SysParaRepository;
 import com.celi.system.dto.CiiPageRequest;
@@ -48,45 +49,32 @@ public class SysParaService {
         return sysPara;
     }
 
-    public int insertSysPara(SysPara sysPara) {
+    public void insertSysPara(SysPara sysPara) {
+        sysPara.setParaId(IdUtil.simpleUUID());
         sysPara.setCreatedBy(StpUtil.getLoginIdAsString());
         sysPara.setCreatedTime(DateUtils.now());
 
-        SysPara save = null;
-
         try {
-            save = sysParaRepository.save(sysPara);
+            sysParaRepository.save(sysPara);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("参数添加异常");
             if (e instanceof DuplicateKeyException) {
                 throw new ServiceException("系统参数名称或者编码不能重复");
             }
-        }
-        if (save != null){
-            return 1;
-        }else {
-            return 0;
         }
     }
 
 
-    public int updateSysPara(SysPara sysPara) {
-
+    public void updateSysPara(SysPara sysPara) {
         sysPara.setUpdatedBy(StpUtil.getLoginIdAsString());
         sysPara.setUpdatedTime(DateUtils.now());
-        SysPara save = null;
         try {
-            save = sysParaRepository.save(sysPara);
+            sysParaRepository.save(sysPara);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("参数修改异常");
             if (e instanceof DuplicateKeyException) {
                 throw new ServiceException("系统参数名称或者编码不能重复");
             }
-        }
-        if (save != null){
-            return 1;
-        }else {
-            return 0;
         }
     }
 

@@ -1,6 +1,7 @@
 package com.celi.system.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.celi.system.dao.UserRepository;
 import com.celi.system.dto.CiiPageRequest;
@@ -23,7 +24,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author ce-li
@@ -54,7 +54,7 @@ public class UserService {
     @Transactional
     public int saveUserInfo(User user) {
         user = encapUserData(user, StpUtil.getLoginIdAsString());
-        user.setUserId(UUID.randomUUID().toString());
+        user.setUserId(IdUtil.simpleUUID());
         user.setPassword(PwdSecurityKey.encryptionPwd(user.getPassword()));
         User save = null;
         try {

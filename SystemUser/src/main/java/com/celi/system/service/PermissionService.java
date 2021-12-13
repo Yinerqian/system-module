@@ -1,5 +1,6 @@
 package com.celi.system.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.celi.system.dao.PermissionRepository;
 import com.celi.system.entity.Permission;
 import com.celi.system.entity.PermissionGroup;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -101,7 +101,7 @@ public class PermissionService {
         if (permissionList.size() != 0) {
             throw new ServiceException("权限编码已存在, 请输入新的权限编码");
         }
-        permission.setPermissionId(UUID.randomUUID().toString());
+        permission.setPermissionId(IdUtil.simpleUUID());
         permission.setCreatedBy(userId);
         permission.setUpdatedBy(userId);
         permission.setCreatedTime(DateUtils.now());

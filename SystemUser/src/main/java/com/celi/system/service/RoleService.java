@@ -1,6 +1,7 @@
 package com.celi.system.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.celi.system.dao.RoleRepository;
 import com.celi.system.dto.CiiPageRequest;
@@ -120,7 +121,7 @@ public class RoleService {
     }
 
         public int insertIntoRole(Role role, String userId) {
-        role.setRoleId(UUID.randomUUID().toString());
+        role.setRoleId(IdUtil.simpleUUID());
         role.setCreatedBy(userId);
         role.setCreatedTime(DateUtils.now());
         role.setUpdatedBy(userId);
