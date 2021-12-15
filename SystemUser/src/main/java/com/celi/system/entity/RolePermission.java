@@ -12,7 +12,7 @@ import javax.persistence.*;
  * @project: cii
  * @description: 用户角色关系类
  */
-@Table(name = "jimu_sys_role_permission")
+@Table(name = "sys_role_permission")
 @Entity
 @IdClass(RolePermissionPrimaryKey.class)
 @Data

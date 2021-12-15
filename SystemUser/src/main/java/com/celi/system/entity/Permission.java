@@ -7,7 +7,7 @@ import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
 
-@Table(name = "jimu_sys_permission")
+@Table(name = "sys_permission")
 @Entity
 @Data
 @ToString

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "jimu_sys_permission_group")
+@Table(name = "sys_permission_group")
 @Data
 @ToString
 @Log4j2

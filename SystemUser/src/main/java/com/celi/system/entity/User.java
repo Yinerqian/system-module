@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name = "jimu_sys_user")
+@Table(name = "sys_user")
 @Data
 @ToString
 @Log4j2

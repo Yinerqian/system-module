@@ -14,7 +14,7 @@ import java.util.List;
  * @Date: 2021/11/10/17:14
  * @Description:
  */
-@Table(name = "jimu_sys_role")
+@Table(name = "sys_role")
 @Entity
 @Data
 @ToString

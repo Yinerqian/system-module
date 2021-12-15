@@ -9,13 +9,13 @@ import java.util.List;
  * @author jiangshengjun
  * @date 2021/12/9
  */
-public interface SysDictionaryRepository extends JpaRepository<SysDictionary, String> {
+public interface SysDictionaryRepository /*extends JpaRepository<SysDictionary, String>*/ {
 
-    List<SysDictionary> queryByIsLeaf(String isLeaf);
+/*    List<SysDictionary> queryByIsLeaf(String isLeaf);
 
     List<SysDictionary> queryByParentIdAndIsLeaf(String parentId, String isLeaf);
 
     List<SysDictionary> queryByDcCodeAndIsLeaf(String dcCode, String isLeaf);
 
-    List<SysDictionary> queryByParentId(String parentId);
+    List<SysDictionary> queryByParentId(String parentId);*/
 }

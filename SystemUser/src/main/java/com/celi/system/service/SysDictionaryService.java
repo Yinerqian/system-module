@@ -25,7 +25,7 @@ public class SysDictionaryService {
 
     private static final String ROOT_PARENT_ID = "0";
 
-    @Resource
+    /*@Resource
     private SysDictionaryRepository sysDictionaryRepository;
 
     public List<SysDictionary> queryAllDictionary() {
@@ -131,5 +131,5 @@ public class SysDictionaryService {
             }
         }
         return childList;
-    }
+    }*/
 }
