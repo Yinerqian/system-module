@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @project: cii
@@ -32,6 +33,5 @@ public class RolePermission {
     @Id
     @Column(name = "PERMISSION_ID", nullable = false)
     private String permissionId;
-
 
 }

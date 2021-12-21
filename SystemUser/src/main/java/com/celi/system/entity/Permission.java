@@ -16,7 +16,7 @@ public class Permission extends BaseCreateBy{
 
     // 权限id
     @Id
-    @Column(name = "permission_id", updatable = false)
+    @Column(name = "PERMISSION_ID", updatable = false)
     private String permissionId;
 
     // 权限分组id

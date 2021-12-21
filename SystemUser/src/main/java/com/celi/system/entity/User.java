@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @date 2021/11/10
@@ -136,5 +137,6 @@ public class User extends BaseCreateBy {
     @Transient
     private List<PermissionGroup> userPermissions;
 
-
+    @Transient
+    private Set<String> permissionCode;
 }

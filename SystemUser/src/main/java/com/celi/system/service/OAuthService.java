@@ -3,9 +3,11 @@ package com.celi.system.service;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.celi.system.constant.SystemConstants;
+import com.celi.system.dao.RolePermissionRepository;
 import com.celi.system.dao.UserRepository;
 import com.celi.system.dto.PermissionGroupDTO;
 import com.celi.system.entity.*;
+import com.celi.system.enums.PermissionTypeEnum;
 import com.celi.system.enums.ServiceCode;
 import com.celi.system.exception.AuthenticationException;
 import com.celi.system.utils.DateUtils;
@@ -27,18 +29,22 @@ import java.util.stream.Collectors;
 public class OAuthService {
 
     @Resource
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
     @Resource
-    private UserRoleService UserRoleService;
+    private UserRoleService userRoleService;
     @Resource
-    private PermissionService PermissionService;
+    private PermissionService permissionService;
     @Resource
     private PermissionGroupService permissionGroupService;
     @Resource
-    private RolePermissionService RolePermissionService;
+    private RolePermissionService rolePermissionService;
+    @Resource
+    private RoleService roleService;
+    @Resource
+    private RolePermissionRepository rolePermissionRepository;
 
     public void userLogin(UserLoginEntity userLoginEntity) {
-        User userInfo = UserRepository.findUserByLoginName(userLoginEntity.getUserName());
+        User userInfo = userRepository.findUserByLoginName(userLoginEntity.getUserName());
         if (null == userInfo) {
             throw new AuthenticationException(ServiceCode.UNKNOWN_USER.getMessage());
         }
@@ -46,13 +52,25 @@ public class OAuthService {
             throw new AuthenticationException(ServiceCode.CHECK_INPUT_PASSWORD.getMessage());
         }
         userInfo.setLastLoginDate(DateUtils.now());
-        UserRepository.save(userInfo);
+        userRepository.save(userInfo);
         StpUtil.login(userInfo.getUserId());
     }
 
     public User queryUserInfo(String userId) {
-        User userInfo = UserRepository.findByUserId(userId);
-        List<UserRole> userRoles = UserRoleService.findRoleIds(userId);
+        User userInfo = userRepository.findByUserId(userId);
+        userInfo.setRoleList(roleService.findAllByRoleIdIn(userId));
+
+        List<String> userRoleIds = userInfo.getRoleList().stream().map(Role::getRoleId).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(userRoleIds)) {
+            // 根据角色ID查询所有的权限
+            List<RolePermission> userRolePermissions = rolePermissionService.queryByRoleIds(userRoleIds);
+            List<String> permissionIds = userRolePermissions.stream().map(RolePermission::getPermissionId).collect(Collectors.toList());
+            List<Permission> permissionList = permissionService.queryPermissionsByIds(permissionIds);
+            Set<String> permissionCodeSet = permissionList.stream().filter(permission -> {
+                return permission.getPermissionType().ordinal() == PermissionTypeEnum.OP.ordinal();
+            }).map(Permission::getPermissionCode).collect(Collectors.toSet());
+            userInfo.setPermissionCode(permissionCodeSet);
+        }
         return userInfo;
     }
 
@@ -63,7 +81,7 @@ public class OAuthService {
         // 根据角色ID查询所有的权限
         List<RolePermission> rolePermissions = getRolePermissions();
         // 查询权限列表
-        List<Permission> userPermissions = PermissionService.queryPermissionsByIds(rolePermissions.stream()
+        List<Permission> userPermissions = permissionService.queryPermissionsByIds(rolePermissions.stream()
                 .map(RolePermission::getPermissionId).collect(Collectors.toList()));
         Map<String, List<Permission>> userPermissionMap = userPermissions.stream().collect(Collectors.groupingBy(Permission::getGroupName));
         List<PermissionGroup> permissionGroups = new ArrayList<>();
@@ -78,14 +96,14 @@ public class OAuthService {
 
     private List<RolePermission> getRolePermissions() {
         String userId = StpUtil.getLoginIdAsString();
-        List<UserRole> userRoles = UserRoleService.findRoleIds(userId);
+        List<UserRole> userRoles = userRoleService.findRoleIds(userId);
         if (CollectionUtils.isEmpty(userRoles)) {
             throw new AuthenticationException("用户未配置权限，请联系管理员");
         }
         // 该用户所有的角色ID
         List<String> userRoleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
         // 根据角色ID查询所有的权限
-        List<RolePermission> rolePermissions = RolePermissionService.queryByRoleIds(userRoleIds);
+        List<RolePermission> rolePermissions = rolePermissionService.queryByRoleIds(userRoleIds);
         if (CollectionUtils.isEmpty(rolePermissions)) {
             throw new AuthenticationException("用户未配置权限，请联系管理员");
         }
@@ -99,9 +117,12 @@ public class OAuthService {
         // 查询权限分组
         List<PermissionGroup> allPermissionGroups = permissionGroupService.findAll();
         // 查询权限列表
-        List<Permission> userPermissions = PermissionService.queryPermissionsByIds(rolePermissions.stream()
+        List<Permission> userPermissions = permissionService.queryPermissionsByIds(rolePermissions.stream()
                 .map(RolePermission::getPermissionId).collect(Collectors.toList()));
-        Map<String, List<Permission>> userPermissionMap = userPermissions.stream().collect(Collectors.groupingBy(Permission::getGroupName));
+        Map<String, List<Permission>> userPermissionMap = userPermissions.stream()
+                .filter(permission -> {
+                    return permission.getPermissionType().ordinal() == PermissionTypeEnum.MENU.ordinal();
+                }).collect(Collectors.groupingBy(Permission::getGroupName));
         // 返回树状数组
         return generateGroupTree(allPermissionGroups, userPermissionMap);
     }
