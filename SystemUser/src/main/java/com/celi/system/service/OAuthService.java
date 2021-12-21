@@ -56,7 +56,27 @@ public class OAuthService {
         return userInfo;
     }
 
-    public List<PermissionGroupDTO> userPermissionByGroup() {
+    /**
+     * @return 扁平权限树
+     */
+    public List<PermissionGroup> userPermissionFlatByGroup() {
+        // 根据角色ID查询所有的权限
+        List<RolePermission> rolePermissions = getRolePermissions();
+        // 查询权限列表
+        List<Permission> userPermissions = PermissionService.queryPermissionsByIds(rolePermissions.stream()
+                .map(RolePermission::getPermissionId).collect(Collectors.toList()));
+        Map<String, List<Permission>> userPermissionMap = userPermissions.stream().collect(Collectors.groupingBy(Permission::getGroupName));
+        List<PermissionGroup> permissionGroups = new ArrayList<>();
+        userPermissionMap.forEach((groupName, permissions) -> {
+            PermissionGroup PermissionGroup = new PermissionGroup();
+            PermissionGroup.setPermissionList(permissions);
+            PermissionGroup.setGroupName(groupName);
+            permissionGroups.add(PermissionGroup);
+        });
+        return permissionGroups;
+    }
+
+    private List<RolePermission> getRolePermissions() {
         String userId = StpUtil.getLoginIdAsString();
         List<UserRole> userRoles = UserRoleService.findRoleIds(userId);
         if (CollectionUtils.isEmpty(userRoles)) {
@@ -69,6 +89,13 @@ public class OAuthService {
         if (CollectionUtils.isEmpty(rolePermissions)) {
             throw new AuthenticationException("用户未配置权限，请联系管理员");
         }
+        return rolePermissions;
+    }
+
+
+    public List<PermissionGroupDTO> userPermissionByGroup() {
+        // 根据角色ID查询所有的权限
+        List<RolePermission> rolePermissions = getRolePermissions();
         // 查询权限分组
         List<PermissionGroup> allPermissionGroups = permissionGroupService.findAll();
         // 查询权限列表
