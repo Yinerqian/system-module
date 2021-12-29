@@ -22,7 +22,7 @@ public interface PermissionRepository extends JpaRepository<Permission, String> 
 
     Permission findByGroupId(String groupId);
 
-    int deleteByPermissionId(String permissionId);
+    void deleteByPermissionId(String permissionId);
 
     List<Permission> findByPermissionIdIn(List<String> permissionIds);
 }
