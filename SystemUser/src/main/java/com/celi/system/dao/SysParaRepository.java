@@ -17,13 +17,13 @@ import java.util.Map;
 @Repository
 public interface SysParaRepository extends JpaRepository<SysPara, String> {
 
-    void deleteByParaId(Integer paraId);
+    void deleteByParaId(String paraId);
 
     Page<SysPara> findAllByParaNameContainingOrParaValueContaining(String paraName, String paraValue, Pageable pageable);
 
     Page<SysPara> findAll(Pageable pageable);
 
-    SysPara findByParaId(Integer paraId);
+    SysPara findByParaId(String paraId);
 
     SysPara findByParaCode(@Param("paraCode") String paraCode);
 

@@ -44,7 +44,7 @@ public class SysParaController {
      * @return
      */
     @GetMapping(value = "/getSysPara")
-    public ResponseDTO getSysPara(@RequestParam Integer paraId) {
+    public ResponseDTO getSysPara(@RequestParam String paraId) {
         return ResponseDTO.ok(sysParaService.getSysPara(paraId));
     }
 
@@ -77,7 +77,7 @@ public class SysParaController {
      * @return
      */
     @DeleteMapping(value = "/removeSysPara")
-    public ResponseDTO removeSysPara(@RequestParam Integer paraId) {
+    public ResponseDTO removeSysPara(@RequestParam String paraId) {
         sysParaService.removeSysPara(paraId);
         return ResponseDTO.ok();
     }

@@ -41,7 +41,7 @@ public class SysParaService {
         return new PageInfo(result);
     }
 
-    public SysPara getSysPara(Integer paraId) {
+    public SysPara getSysPara(String paraId) {
         SysPara sysPara = sysParaRepository.findByParaId(paraId);
         if (sysPara == null) {
             throw new ServiceException("未找到该参数");
@@ -78,7 +78,7 @@ public class SysParaService {
         }
     }
 
-    public void removeSysPara(Integer paraId) {
+    public void removeSysPara(String paraId) {
         sysParaRepository.deleteByParaId(paraId);
     }
 
