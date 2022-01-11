@@ -54,4 +54,7 @@ public class Permission extends BaseCreateBy{
     @Column(name = "MENU_ICON_CLASS")
     private String menuIconClass;
 
+    @Column(name = "SORT")
+    private Integer sort;
+
 }

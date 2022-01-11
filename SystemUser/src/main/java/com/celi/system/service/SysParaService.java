@@ -82,4 +82,12 @@ public class SysParaService {
         sysParaRepository.deleteByParaId(paraId);
     }
 
+
+    public SysPara getSysParaByParaCode(String paraCode) {
+        SysPara sysPara = sysParaRepository.findAllByParaCode(paraCode);
+        if (sysPara == null) {
+            log.error("未找到该系统参数 {}", paraCode);
+        }
+        return sysPara;
+    }
 }

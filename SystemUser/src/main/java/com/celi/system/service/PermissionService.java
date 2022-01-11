@@ -1,14 +1,19 @@
 package com.celi.system.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
 import com.celi.system.dao.PermissionRepository;
 import com.celi.system.entity.Permission;
 import com.celi.system.entity.PermissionGroup;
+import com.celi.system.entity.Role;
+import com.celi.system.entity.UserRole;
 import com.celi.system.enums.PermissionTypeEnum;
 import com.celi.system.exception.ServiceException;
 import com.celi.system.utils.DateUtils;
 import com.celi.system.utils.EnumUtils;
+import com.celi.system.utils.RoleCodeConstant;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.dialect.Ingres9Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,6 +42,12 @@ public class PermissionService {
 
     @Autowired
     private PermissionGroupService permissionGroupService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private UserRoleService userRoleService;
 
 
     /**
@@ -62,9 +74,17 @@ public class PermissionService {
         // 查询所有权限
         List<Permission> permissionList = null;
         if (filter.getPermissionName() != null || filter.getGroupName() != null){
-            permissionList = permissionRepository.findAllByPermissionNameContainingOrGroupNameContaining(filter.getPermissionName(), filter.getGroupName());
+            if (isTenantAdminRole()) {
+                permissionList = permissionRepository.findAllByPermissionNameContainingOrGroupNameContaining(filter.getPermissionName(), filter.getGroupName());
+            } else {
+                permissionList = permissionRepository.findAllByPermissionNameContainingOrGroupNameContainingAndPlatformAdminFlag(filter.getPermissionName(), filter.getGroupName(), 0);
+            }
         } else {
-            permissionList = permissionRepository.findAll();
+            if (isTenantAdminRole()) {
+                permissionList = permissionRepository.findAll();
+            } else {
+                permissionList = permissionRepository.findAllByPlatformAdminFlag(0);
+            }
         }
         // 将权限添加到各分组中
         for (PermissionGroup group : groupList) {
@@ -153,5 +173,20 @@ public class PermissionService {
 
     public List<Permission> queryPermissionsByIds(List<String> permissionIds) {
         return permissionRepository.findByPermissionIdIn(permissionIds);
+    }
+
+    /**
+     * 判断当前登录用户是否为租户管理员工
+     * @return
+     */
+    private boolean isTenantAdminRole() {
+        String userId = StpUtil.getLoginIdAsString();
+        List<Role> roles = roleService.findAllByRoleIdIn(userId);
+        for (Role role : roles) {
+            if(RoleCodeConstant.TENANT_ADMIN_CODE.equals(role.getRoleCode())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

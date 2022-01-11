@@ -82,5 +82,8 @@ public class SysParaController {
         return ResponseDTO.ok();
     }
 
-
+    @GetMapping(value = "/getSysParaByParaCode")
+    public ResponseDTO getSysParaByParaCode(@RequestParam String paraCode) {
+        return ResponseDTO.ok(sysParaService.getSysParaByParaCode(paraCode));
+    }
 }

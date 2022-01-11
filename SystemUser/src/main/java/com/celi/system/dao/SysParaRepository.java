@@ -25,6 +25,6 @@ public interface SysParaRepository extends JpaRepository<SysPara, String> {
 
     SysPara findByParaId(String paraId);
 
-    SysPara findByParaCode(@Param("paraCode") String paraCode);
+    SysPara findAllByParaCode(String paraCode);
 
 }
