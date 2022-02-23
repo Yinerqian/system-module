@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *  系统参数业务层
@@ -78,6 +79,7 @@ public class SysParaService {
         }
     }
 
+    @Transactional
     public void removeSysPara(String paraId) {
         sysParaRepository.deleteByParaId(paraId);
     }
