@@ -171,6 +171,11 @@ public class PermissionService {
         return EnumUtils.listEnums(PermissionTypeEnum.class);
     }
 
+    /**
+     * 查看PermissionId对应的权限
+     * @param permissionIds
+     * @return
+     */
     public List<Permission> queryPermissionsByIds(List<String> permissionIds) {
         return permissionRepository.findByPermissionIdIn(permissionIds);
     }

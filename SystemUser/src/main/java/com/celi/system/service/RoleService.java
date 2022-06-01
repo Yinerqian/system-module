@@ -3,6 +3,7 @@ package com.celi.system.service;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.celi.system.dao.PermissionRepository;
 import com.celi.system.dao.RoleRepository;
 import com.celi.system.dto.CiiPageRequest;
 import com.celi.system.dto.PageInfo;
@@ -20,7 +21,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +39,7 @@ public class RoleService {
     private RolePermissionService rolePermissionService;
 
     @Autowired
-    private PermissionService permissionService;
+    private PermissionRepository permissionRepository;
 
     @Autowired
     public RoleService(RoleRepository AlarmRepository) {
@@ -114,7 +114,7 @@ public class RoleService {
         //取出权限id
         List<String> permissionIdList = permissionIds.stream().map(RolePermission::getPermissionId).collect(Collectors.toList());
         //查询权限id对应的权限
-        List<Permission> permissionList = permissionService.queryPermissionsByIds(permissionIdList);
+        List<Permission> permissionList = permissionRepository.findByPermissionIdIn(permissionIdList);
 
         role.setPermissionList(permissionList);
         return role;
