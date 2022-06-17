@@ -29,7 +29,7 @@ public class PermissionGroup extends BaseCreateBy {
     private String parentGroupId = "0";
 
     // 排序
-    @Transient
+    @Column(name = "SORT")
     private Integer sort;
 
     @Transient

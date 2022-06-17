@@ -2,6 +2,7 @@ package com.celi.system.dao;
 
 import com.celi.system.entity.PermissionGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public interface PermissionGroupRepository extends JpaRepository<PermissionGroup
 
     List<PermissionGroup> findAllByGroupNameContaining(String permissionName);
 
+    @Query(value = "select * from sys_permission_group t order by t.sort", nativeQuery = true)
     List<PermissionGroup> findAll();
 
     PermissionGroup findPermissionByGroupId(String permissionId);

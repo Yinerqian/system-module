@@ -12,6 +12,7 @@ import com.celi.system.exception.ServiceException;
 import com.celi.system.utils.DateUtils;
 import com.celi.system.utils.EnumUtils;
 import com.celi.system.utils.RoleCodeConstant;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.dialect.Ingres9Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
  * @Description:
  */
 @Service
+@Slf4j
 public class PermissionService {
 
     private PermissionRepository permissionRepository;
@@ -71,6 +74,8 @@ public class PermissionService {
             groupFilter.setGroupName(filter.getGroupName());
         }
         List<PermissionGroup> groupList = permissionGroupService.findAll(filter.getGroupName());
+        groupList.forEach(group -> log.info("name: {}, sort: {}",group.getGroupName(), group.getSort()));
+
         // 查询所有权限
         List<Permission> permissionList = null;
         if (filter.getPermissionName() != null || filter.getGroupName() != null){
@@ -86,6 +91,13 @@ public class PermissionService {
                 permissionList = permissionRepository.findAllByPlatformAdminFlag(0);
             }
         }
+
+        log.info("========================================================================");
+        // 按 sort 字段排序
+        groupList = groupList.stream().sorted(Comparator.comparing(PermissionGroup::getSort)).collect(Collectors.toList());
+        groupList.forEach(group -> log.info("name: {}, sort: {}",group.getGroupName(), group.getSort()));
+        permissionList = permissionList.stream().sorted(Comparator.comparing(Permission::getSort)).collect(Collectors.toList());
+
         // 将权限添加到各分组中
         for (PermissionGroup group : groupList) {
             List<Permission> list = new ArrayList<>();

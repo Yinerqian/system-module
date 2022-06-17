@@ -119,6 +119,11 @@ public class OAuthService {
         // 查询权限列表
         List<Permission> userPermissions = permissionService.queryPermissionsByIds(rolePermissions.stream()
                 .map(RolePermission::getPermissionId).collect(Collectors.toList()));
+
+        // 排序
+        allPermissionGroups = allPermissionGroups.stream().sorted(Comparator.comparingInt(PermissionGroup::getSort)).collect(Collectors.toList());
+        userPermissions = userPermissions.stream().sorted(Comparator.comparingInt(Permission::getSort)).collect(Collectors.toList());
+
         Map<String, List<Permission>> userPermissionMap = userPermissions.stream()
                 .filter(permission -> {
                     return permission.getPermissionType().ordinal() == PermissionTypeEnum.MENU.ordinal();
