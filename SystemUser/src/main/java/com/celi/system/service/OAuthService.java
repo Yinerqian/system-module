@@ -21,6 +21,8 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static cn.dev33.satoken.stp.StpUtil.getPermissionList;
+
 /**
  * @author ce-li
  * @date 2021/11/11
@@ -81,15 +83,35 @@ public class OAuthService {
         // 根据角色ID查询所有的权限
         List<RolePermission> rolePermissions = getRolePermissions();
         // 查询权限列表
-        List<Permission> userPermissions = permissionService.queryPermissionsByIds(rolePermissions.stream()
-                .map(RolePermission::getPermissionId).collect(Collectors.toList()));
-        Map<String, List<Permission>> userPermissionMap = userPermissions.stream().collect(Collectors.groupingBy(Permission::getGroupName));
+        List<Permission> userPermissions = permissionService.queryPermissionsByIds(
+                        rolePermissions.stream()
+                                .map(RolePermission::getPermissionId)
+                                .collect(Collectors.toList()))
+                .stream()
+                .sorted(Comparator.comparingInt(Permission::getSort))
+                .collect(Collectors.toList());
+        Map<String, List<Permission>> userPermissionMap = new HashMap<>();
+
         List<PermissionGroup> permissionGroups = new ArrayList<>();
-        userPermissionMap.forEach((groupName, permissions) -> {
-            PermissionGroup PermissionGroup = new PermissionGroup();
-            PermissionGroup.setPermissionList(permissions);
-            PermissionGroup.setGroupName(groupName);
-            permissionGroups.add(PermissionGroup);
+
+        userPermissions.forEach(userPermission -> {
+            String groupName = userPermission.getGroupName();
+            Optional<PermissionGroup> first = permissionGroups.stream()
+                    .filter(group -> group.getGroupName().equals(groupName))
+                    .findFirst();
+            if (first.isPresent()) {
+                PermissionGroup targetGroup = first.get();
+                int i = permissionGroups.indexOf(targetGroup);
+                targetGroup.getPermissionList().add(userPermission);
+                permissionGroups.set(i, targetGroup);
+            } else {
+                PermissionGroup permissionGroup = new PermissionGroup();
+                permissionGroup.setGroupName(groupName);
+                List<Permission> permissions = new ArrayList<>();
+                permissions.add(userPermission);
+                permissionGroup.setPermissionList(permissions);
+                permissionGroups.add(permissionGroup);
+            }
         });
         return permissionGroups;
     }
