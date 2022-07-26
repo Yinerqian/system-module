@@ -17,61 +17,61 @@ public class ProductionLine extends BaseCreateBy {
     /**
      * 产线id
      */
-    private String lineId;
+    protected String lineId;
 
     /**
      * 父分组id
      */
-    private String parentLineId;
+    protected String parentLineId;
 
     /**
      * 产线名称
      */
-    private String lineName;
+    protected String lineName;
 
     /**
      * 序号
      */
-    private Integer orderIndex;
+    protected Integer orderIndex;
 
     /**
      * 消息主题
      */
-    private String messageTopic;
+    protected String messageTopic;
 
     /**
      * 上游产线id
      */
-    private String preLineId;
+    protected String preLineId;
 
     /**
      * 下游产线id
      */
-    private String nextLineId;
+    protected String nextLineId;
 
     /**
      * 评价对象id
      */
-    private String targetId;
+    protected String targetId;
 
     /**
      * 备注
      */
-    private String remark;
+    protected String remark;
     
     /**
      * 图标
      */
-    private String icon;
+    protected String icon;
 
     /**
      * 开始信号uuid
      */
-    private String startPointUuid;
+    protected String startPointUuid;
 
     /**
      * 结束信号Uuid
      */
-    private String endPointUuid;
+    protected String endPointUuid;
 
 }

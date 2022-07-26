@@ -20,46 +20,46 @@ public class ProductionLineProcedure extends BaseCreateBy {
     /**
      * 工序id
      */
-    private String procedureId;
+    protected String procedureId;
 
     /**
      * 工序名称
      */
-    private String procedureName;
+    protected String procedureName;
 
     /**
      * 关联的分组id
      */
-    private String lineId;
+    protected String lineId;
 
     /**
      * 开始信号uuid
      */
-    private String startPointUuid;
+    protected String startPointUuid;
 
     /**
      * 结束信号Uuid
      */
-    private String endPointUuid;
+    protected String endPointUuid;
 
     /**
      * 序号
      */
-    private Integer orderIndex;
+    protected Integer orderIndex;
 
     /**
      * 备注
      */
-    private String remark;
+    protected String remark;
 
     /**
      * 图标
      */
-    private String icon;
+    protected String icon;
 
 
     /**
      * 工序下点位 (uuid) 列表
      */
-    private List<String> pointList;
+    protected List<String> pointList;
 }

@@ -47,7 +47,7 @@ public class Material extends BaseCreateBy {
     /**
      * 工序列表
      */
-    private List<ProductionLineProcedureVO> producerList;
+    private List<ProductionLineProcedureVO> procedureList;
 
     /**
      * 评价对象
