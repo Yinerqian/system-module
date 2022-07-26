@@ -1,5 +1,6 @@
 package com.celi.system.cii.engine.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 /**
@@ -8,6 +9,26 @@ import lombok.Data;
 
 @Data
 public class PointData {
+
+    public PointData(JSONObject jsonObject) {
+        String json = jsonObject.toJSONString();
+
+        if (json.contains("type")) {
+            this.type = jsonObject.getString("type");
+        }
+
+        if (json.contains("uuid")) {
+            this.type = jsonObject.getString("uuid");
+        }
+
+        if (json.contains("timestamp")) {
+            this.type = jsonObject.getString("timestamp");
+        }
+
+        if (json.contains("value")) {
+            this.type = jsonObject.getString("value");
+        }
+    }
 
 
     /**
@@ -29,5 +50,7 @@ public class PointData {
      * 点位的值
      */
     public Double value;
+
+
 
 }

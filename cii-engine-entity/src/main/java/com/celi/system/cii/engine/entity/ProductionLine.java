@@ -74,4 +74,14 @@ public class ProductionLine extends BaseCreateBy {
      */
     protected String endPointUuid;
 
+    /**
+     * 产线下工序列表
+     */
+    protected List<ProductionLineProcedure> procedureList;
+
+    /**
+     * 产线下点位 (uuid) 列表
+     */
+    protected List<String> pointList;
+
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,5 +62,9 @@ public class ProductionLineProcedure extends BaseCreateBy {
     /**
      * 工序下点位 (uuid) 列表
      */
-    protected List<String> pointList;
+    protected List<PointData> pointList;
+
+    protected Date startTime;
+
+    protected Date endTime;
 }

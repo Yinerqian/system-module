@@ -1,7 +1,6 @@
 package com.celi.system.cii.engine.entity;
 
 import com.celi.cii.base.entity.BaseCreateBy;
-import com.celi.system.cii.engine.vo.ProductionLineProcedureVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,7 +46,7 @@ public class Material extends BaseCreateBy {
     /**
      * 工序列表
      */
-    private List<ProductionLineProcedureVO> procedureList;
+    private List<ProductionLineProcedure> procedureList;
 
     /**
      * 评价对象
@@ -55,4 +54,6 @@ public class Material extends BaseCreateBy {
      */
     private List<String> evaluateProps;
 
+    // 当前工序id
+    private String currentProcedureId;
 }
