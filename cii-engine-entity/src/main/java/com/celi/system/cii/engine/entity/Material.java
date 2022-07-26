@@ -1,7 +1,7 @@
 package com.celi.system.cii.engine.entity;
 
 import com.celi.system.base.BaseCreateBy;
-import com.celi.system.cii.engine.dto.ProducerDTO;
+import com.celi.system.cii.engine.vo.ProductionLineProcedureVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,10 +47,11 @@ public class Material extends BaseCreateBy {
     /**
      * 工序列表
      */
-    private List<ProducerDTO> producerList;
+    private List<ProductionLineProcedureVO> producerList;
 
     /**
      * 评价对象
+     * TODO 需要修改数据类型为 评价对象实体类
      */
     private List<String> evaluateProps;
 

@@ -1,6 +1,6 @@
 package com.celi.system.cii.engine.entity;
 
-import com.celi.cii.base.entity.BaseCreateBy;
+import com.celi.system.base.BaseCreateBy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -64,13 +64,4 @@ public class ProductionLine extends BaseCreateBy {
      */
     private String icon;
 
-    /**
-     * 产线下工序列表
-     */
-    private List<ProductionLineProcedure> procedureList;
-
-    /**
-     * 产线下点位 (uuid) 列表
-     */
-    private List<String> pointList;
 }

@@ -1,6 +1,6 @@
 package com.celi.system.cii.engine.entity;
 
-import com.celi.cii.base.entity.BaseCreateBy;
+import com.celi.system.base.BaseCreateBy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

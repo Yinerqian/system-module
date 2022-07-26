@@ -1,4 +1,4 @@
-package com.celi.system.cii.engine.dto;
+package com.celi.system.cii.engine.vo;
 
 import com.celi.system.cii.engine.entity.PointData;
 import lombok.Data;
@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 工序对象 DTO
+ * 工序对象 VO
  */
 @Data
-public class ProducerDTO {
+public class ProductionLineProcedureVO {
     /**
      * 工序 Id
      */
