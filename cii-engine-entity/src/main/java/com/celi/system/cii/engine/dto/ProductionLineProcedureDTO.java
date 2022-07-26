@@ -12,7 +12,6 @@ import java.util.List;
  * 产线工序 DTO
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductionLineProcedureDTO extends ProductionLineProcedure {
