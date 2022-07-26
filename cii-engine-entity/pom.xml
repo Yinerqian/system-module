@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>com.celi</groupId>
-            <artifactId>system-base</artifactId>
+            <artifactId>cii-common</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

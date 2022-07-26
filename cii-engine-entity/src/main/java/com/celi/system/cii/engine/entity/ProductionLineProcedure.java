@@ -1,6 +1,6 @@
 package com.celi.system.cii.engine.entity;
 
-import com.celi.system.base.BaseCreateBy;
+import com.celi.cii.base.entity.BaseCreateBy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,14 +33,14 @@ public class ProductionLineProcedure extends BaseCreateBy {
     private String lineId;
 
     /**
-     * 开始信号id
+     * 开始信号uuid
      */
-    private String startPointId;
+    private String startPointUuid;
 
     /**
-     * 结束信号id
+     * 结束信号Uuid
      */
-    private String endPointId;
+    private String endPointUuid;
 
     /**
      * 序号

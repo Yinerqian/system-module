@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>system-parent</artifactId>
+        <groupId>com.celi</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>cii-common</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+
+    <properties>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <log4j.version>1.2.17</log4j.version>
+        <lombok.version>1.18.20</lombok.version>
+        <mysql.version>8.0.18</mysql.version>
+        <oracle.version>21.1.0.0</oracle.version>
+        <sqlserver.version>8.2.2.jre8</sqlserver.version>
+        <hive.version>3.1.2</hive.version>
+        <postgresql.version>42.2.23</postgresql.version>
+        <hikari.verison>2.13.0</hikari.verison>
+        <druid.version>1.1.17</druid.version>
+        <mybatis.spring.boot.verison>2.2.0</mybatis.spring.boot.verison>
+        <hutool.version>5.7.3</hutool.version>
+        <pageHelper.version>1.3.0</pageHelper.version>
+        <slf4j-api.version>1.7.30</slf4j-api.version>
+        <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+        <jedis.version>3.2.0</jedis.version>
+        <cii.version>1.0-SNAPSHOT</cii.version>
+        <commons-lang3.version>3.2</commons-lang3.version>
+        <fastjson.version>1.2.58</fastjson.version>
+        <httpcore.version>4.4.10</httpcore.version>
+        <httpclient.version>4.5.6</httpclient.version>
+        <flink.version>1.13.0</flink.version>
+        <scala.binary.version>2.11</scala.binary.version>
+        <drools.version>7.57.0.Final</drools.version>
+        <tdengine.version>2.0.34</tdengine.version>
+        <cii-device-access-core.version>0.0.23</cii-device-access-core.version>
+        <quartz.version>2.3.0</quartz.version>
+        <quartz.job.version>2.3.0</quartz.job.version>
+        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
+        <aviator.version>5.3.1</aviator.version>
+        <kafka-clients.version>3.2.0</kafka-clients.version>
+        <jackson.version>2.13.3</jackson.version>
+        <junit.version>4.13</junit.version>
+        <junit-jupiter.version>5.6.2</junit-jupiter.version>
+        <hutool.version>5.7.3</hutool.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${httpcore.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

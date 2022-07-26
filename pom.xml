@@ -24,8 +24,8 @@
 
     <modules>
         <module>system-user</module>
-        <module>system-base</module>
         <module>cii-engine-entity</module>
+        <module>cii-common</module>
     </modules>
 
     <packaging>pom</packaging>
