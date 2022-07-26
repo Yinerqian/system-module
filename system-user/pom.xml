@@ -6,8 +6,8 @@
     <groupId>com.celi</groupId>
     <artifactId>system-user</artifactId>
     <name>system-user</name>
-    <version>1.0.0-SNAPSHOT</version>
-    <description>cii 用户模块</description>
+    <version>2.0.0-SNAPSHOT</version>
+    <description>用户模块</description>
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
