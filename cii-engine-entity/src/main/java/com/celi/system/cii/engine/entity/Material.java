@@ -1,7 +1,9 @@
 package com.celi.system.cii.engine.entity;
 
 import com.celi.cii.base.entity.BaseCreateBy;
+import com.celi.system.cii.engine.entity.enums.MaterialProductionStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -60,15 +62,23 @@ public class Material extends BaseCreateBy {
     // 当前工序id
     private String currentProcedureId;
 
+    // 当前产线物料的生产状态
+    private MaterialProductionStatusEnum productionStatus;
+
     // 上游物料Id
-    private String prevMaterialId;
+    private List<String> prevMaterialIdList;
 
     // 下游物料Id
-    private String nextMaterialId;
+    private List<String> nextMaterialIdList;
 
     // 上游产线Id
-    private String prevLineId;
+    private List<String> prevLineIdList;
 
     // 下游产线Id
-    private String nextLineId;
+    private List<String> nextLineIdList;
+
+    @JsonProperty(value = "productionStatusName")
+    public String getProductionStatusName() {
+        return productionStatus == null ? null : productionStatus.getTitle();
+    }
 }
