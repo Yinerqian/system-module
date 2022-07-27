@@ -59,4 +59,16 @@ public class Material extends BaseCreateBy {
 
     // 当前工序id
     private String currentProcedureId;
+
+    // 上游物料Id
+    private String prevMaterialId;
+
+    // 下游物料Id
+    private String nextMaterialId;
+
+    // 上游产线Id
+    private String prevLineId;
+
+    // 下游产线Id
+    private String nextLineId;
 }
