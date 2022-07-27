@@ -1,6 +1,7 @@
 package com.celi.system.cii.engine.entity;
 
 import com.celi.cii.base.entity.BaseCreateBy;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,11 +32,13 @@ public class Material extends BaseCreateBy {
     /**
      * 物料生产开始时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
     /**
      * 物料生产结束时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
 
     /**
