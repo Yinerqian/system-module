@@ -1,5 +1,6 @@
 package com.celi.system.cii.engine.entity;
 
+import cn.hutool.core.collection.CollUtil;
 import com.celi.cii.base.entity.BaseCreateBy;
 import com.celi.system.cii.engine.entity.enums.MaterialProductionStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -80,5 +81,13 @@ public class Material extends BaseCreateBy {
     @JsonProperty(value = "productionStatusName")
     public String getProductionStatusName() {
         return productionStatus == null ? null : productionStatus.getTitle();
+    }
+
+    public String getOnePrevMaterialId() {
+        return CollUtil.isNotEmpty(prevMaterialIdList) ? prevMaterialIdList.get(0) : null;
+    }
+
+    public void setOnePreMaterialId(String preMaterialId) {
+
     }
 }
