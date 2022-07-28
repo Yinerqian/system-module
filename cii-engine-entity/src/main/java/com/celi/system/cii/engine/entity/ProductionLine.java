@@ -64,13 +64,17 @@ public class ProductionLine extends BaseCreateBy {
      */
     protected String icon;
 
+    protected String startPointId;
+
+    protected String endPointId;
+
     /**
-     * 开始信号uuid
+     * 开始信号uuid join字段
      */
     protected String startPointUuid;
 
     /**
-     * 结束信号Uuid
+     * 结束信号Uuid join字段
      */
     protected String endPointUuid;
 

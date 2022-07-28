@@ -34,6 +34,10 @@ public class ProductionLineProcedure extends BaseCreateBy {
      */
     protected String lineId;
 
+    protected String startPointId;
+
+    protected String endPointId;
+
     /**
      * 开始信号uuid
      */
