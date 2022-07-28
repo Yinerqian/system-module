@@ -92,6 +92,7 @@ public class ProductionLine extends BaseCreateBy {
      */
     protected List<String> pointList;
 
+
     // 该产线同时只能生产一个物料
     protected Integer singleMaterialFlag;
 }

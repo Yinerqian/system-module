@@ -73,6 +73,8 @@ public class ProductionLineProcedure extends BaseCreateBy {
      */
     protected List<PointData> pointList;
 
+    protected List<ProcedureKeyPoint> keyPointList;
+
     protected Date startTime;
 
     protected Date endTime;
