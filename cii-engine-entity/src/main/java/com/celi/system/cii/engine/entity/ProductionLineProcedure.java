@@ -1,5 +1,6 @@
 package com.celi.system.cii.engine.entity;
 
+import cii.da.message.codec.model.PointData;
 import com.celi.cii.base.entity.BaseCreateBy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
