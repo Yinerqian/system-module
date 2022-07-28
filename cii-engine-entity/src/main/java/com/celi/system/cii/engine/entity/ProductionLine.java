@@ -68,6 +68,10 @@ public class ProductionLine extends BaseCreateBy {
 
     protected String endPointId;
 
+    protected String startPointName;
+
+    protected String endPointName;
+
     /**
      * 开始信号uuid join字段
      */
