@@ -14,6 +14,7 @@ public enum DataTypeEnum implements BaseEnum {
     BOOLEAN("boolean", "布尔"),
     STRING("string", "字符串"),
     TIMESTAMP("timestamp", "时间戳"),
+    OTHER("other", "其他"),
     ;
 
     private String code;

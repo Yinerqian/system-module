@@ -10,6 +10,8 @@ public enum MaterialProductionStatusEnum implements BaseEnum {
     UN_START("UN_START", "未开始"),
     IN_PRODUCTION("IN_PRODUCTION", "生产中"),
     FINISH("FINISH", "生产结束"),
+    DROP("DROP", "丢弃"),
+    EXCEPTION("EXCEPTION", "跟踪异常")
     ;
 
     private String code;

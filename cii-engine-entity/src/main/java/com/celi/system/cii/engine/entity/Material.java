@@ -32,6 +32,9 @@ public class Material extends BaseCreateBy {
      */
     private String materialCode;
 
+    // 排序号
+    private Integer orderIndex;
+
     /**
      * 物料生产开始时间
      */
