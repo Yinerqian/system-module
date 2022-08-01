@@ -63,6 +63,12 @@ public class User extends BaseCreateBy {
     @Column(name = "PASSWORD")
     private String password;
 
+    /**
+     * MasterKey
+     */
+    @Column(name = "MASTER_KEY")
+    private String masterKey;
+
     // 修改密码 旧密码
     @Transient
     private String oldPassword;
