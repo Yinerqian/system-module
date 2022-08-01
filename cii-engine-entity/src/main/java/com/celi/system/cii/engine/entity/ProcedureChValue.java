@@ -7,13 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 特征值关联点位
+ * 工序特征值
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProcedureChValuePoint extends BaseCreateBy {
+public class ProcedureChValue extends BaseCreateBy {
 
     /**
      * 工序id
@@ -31,32 +31,14 @@ public class ProcedureChValuePoint extends BaseCreateBy {
     private Integer tenantId;
 
     /**
-     * 点位id
+     * 产线ID
      */
-    private String pointId;
-
-    /**
-     * 点位uuid
-     */
-    private String pointUuid;
-
-    /**
-     * 点位名称，冗余字段
-     */
-    private String pointName;
-
-    /**
-     * 关键点位别名
-     */
-    private String aliasName;
+    private String lineId;
 
     /**
      * 序号
      */
     private Integer orderIndex;
 
-    /**
-     * 计算脚本，默认从特征值管理中继承
-     */
-    private String chValueScript;
+
 }
