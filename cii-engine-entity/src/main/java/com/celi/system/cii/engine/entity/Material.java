@@ -2,6 +2,7 @@ package com.celi.system.cii.engine.entity;
 
 import cn.hutool.core.collection.CollUtil;
 import com.celi.cii.base.entity.BaseCreateBy;
+import com.celi.system.cii.engine.entity.enums.EvalResultStatusEnum;
 import com.celi.system.cii.engine.entity.enums.MaterialProductionStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,8 +34,25 @@ public class Material extends BaseCreateBy {
      */
     private String materialCode;
 
-    // 排序号
+    /**
+     * 手动修改前的物料号
+     */
+    private String beforeChangeMaterialCode;
+
+    /**
+     * 排序号
+     */
     private Integer orderIndex;
+
+    /**
+     * 评价对象ID
+     */
+    private String targetId;
+
+    /**
+     * 质量评价结果
+     */
+    private EvalResultStatusEnum evalResult;
 
     /**
      * 物料生产开始时间
@@ -86,11 +105,14 @@ public class Material extends BaseCreateBy {
         return productionStatus == null ? null : productionStatus.getTitle();
     }
 
-    public String getOnePrevMaterialId() {
-        return CollUtil.isNotEmpty(prevMaterialIdList) ? prevMaterialIdList.get(0) : null;
-    }
-
-    public void setOnePreMaterialId(String preMaterialId) {
-
-    }
+//    public String getOnePrevMaterialId() {
+//        return CollUtil.isNotEmpty(prevMaterialIdList) ? prevMaterialIdList.get(0) : null;
+//    }
+//
+//    public void setOnePreMaterialId(String preMaterialId) {
+//        if (prevMaterialIdList == null) {
+//            prevMaterialIdList = new ArrayList<>();
+//        }
+//
+//    }
 }
