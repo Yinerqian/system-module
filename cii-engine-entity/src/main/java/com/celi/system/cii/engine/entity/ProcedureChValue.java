@@ -25,10 +25,6 @@ public class ProcedureChValue extends BaseCreateBy {
      */
     private String chValueId;
 
-    /**
-     * 租户ID
-     */
-    private Integer tenantId;
 
     /**
      * 产线ID

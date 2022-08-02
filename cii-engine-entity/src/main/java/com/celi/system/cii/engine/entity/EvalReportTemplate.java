@@ -13,10 +13,6 @@ public class EvalReportTemplate extends BaseCreateBy {
      */
     private String templateId;
 
-    /**
-     *  租户ID
-     */
-    private Integer tenantId;
 
     /**
      * 模板名称

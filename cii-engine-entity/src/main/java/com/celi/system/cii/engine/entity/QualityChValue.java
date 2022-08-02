@@ -27,11 +27,6 @@ public class QualityChValue extends BaseCreateBy {
     private String chValueId;
 
     /**
-     * 租户Id
-     */
-    private Integer tenantId;
-
-    /**
      * 评价对象Id
      */
     private String targetId;
