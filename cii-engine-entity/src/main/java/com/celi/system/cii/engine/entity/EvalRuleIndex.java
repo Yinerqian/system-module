@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,9 +56,17 @@ public class EvalRuleIndex extends BaseCreateBy {
      */
     private String chValueJson;
 
+    // 开始点位id
     private String startPointId;
 
+    // 结束点位id
     private String endPointId;
+
+    // 实际的开始时间
+    private Date startDate;
+
+    // 实际的结束时间
+    private Date endDate;
 
     /**
      * 指标数据相关

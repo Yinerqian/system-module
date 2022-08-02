@@ -99,10 +99,6 @@ public class QualityChValue extends BaseCreateBy {
      */
     private String targetName;
 
-    /**
-     * 产线ID
-     */
-    private String lineId;
 
     /**
      * 特征值开始信号点位
