@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProcedureChValuePoint {
+public class LineChValuePoint {
 
     /**
      * 特征值id
