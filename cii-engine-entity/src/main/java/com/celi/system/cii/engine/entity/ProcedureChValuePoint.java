@@ -1,8 +1,17 @@
 package com.celi.system.cii.engine.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  *  特征值关联点位
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProcedureChValuePoint {
 
     /**
