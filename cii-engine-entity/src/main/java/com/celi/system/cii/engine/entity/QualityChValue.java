@@ -78,6 +78,22 @@ public class QualityChValue extends BaseCreateBy {
      */
     private String targetName;
 
+    /**
+     * 产线ID
+     */
+    private String lineId;
+
+    /**
+     * 特征值开始信号点位
+     */
+    private String startPointId;
+
+    /**
+     * 特征值结束信号点位
+     */
+    private String endPointId;
+
+
 
     @JsonProperty(value = "chValueTypeName")
     public String getChValueTypeName() {
