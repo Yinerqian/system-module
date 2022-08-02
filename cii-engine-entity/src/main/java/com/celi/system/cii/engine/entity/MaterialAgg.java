@@ -26,6 +26,9 @@ public class MaterialAgg {
     // 总体评价结果,由其关联的materialList中的评价结果共同确定
     private EvalResultStatusEnum evalResult;
 
+    // 总体评价分数，由其关联的materialList中共同确定
+    private Float evalPoint;
+
     // 将同一物料不同产线的工序放到一个list中
     private List<ProductionLineProcedure> allProcedureList;
 

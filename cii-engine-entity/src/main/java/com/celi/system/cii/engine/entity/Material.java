@@ -55,6 +55,12 @@ public class Material extends BaseCreateBy {
     private EvalResultStatusEnum evalResult;
 
     /**
+     * 质量评价分数
+     */
+    private Float evalPoint;
+
+
+    /**
      * 物料生产开始时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

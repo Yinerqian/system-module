@@ -45,9 +45,18 @@ public class EvalRuleIndex extends BaseCreateBy {
     private String advanceJson;
 
     /**
-     * 关联的点位json数组
+     * 关联的点位json数组，含pointId、name、uuid、别名
      */
     private String pointJson;
+
+    /**
+     * 关联的特征值json，含chValueId、name、uuid、别名
+     */
+    private String chValueJson;
+
+    private String startPointId;
+
+    private String endPointId;
 
     /**
      * 指标数据相关

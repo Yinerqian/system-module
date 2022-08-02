@@ -37,6 +37,27 @@ public class QualityChValue extends BaseCreateBy {
     private String targetId;
 
     /**
+     * 产线id
+     */
+    private String lineId;
+
+    private String lineName;
+
+    /**
+     * 开始信号uuid
+     */
+    private String startPointUuid;
+
+    private String startPointName;
+
+    /**
+     * 结束信号uuid
+     */
+    private String endPointUuid;
+
+    private String endPointName;
+
+    /**
      * 特征值名称
      */
     private String chValueName;
