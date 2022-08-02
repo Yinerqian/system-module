@@ -100,11 +100,20 @@ public class AlarmEvent extends BaseCreateBy {
      */
     private String alarmDesc;
 
-
     /**
      * 告警状态 1-未读 2-已读 3-已确认
      */
     private AlarmStatusEnum alarmStatus;
+
+    /**
+     * 告警次数
+     */
+    private Integer alarmCount;
+
+    /**
+     * 恢复时间
+     */
+    private Date recoveryDate;
 
     @JsonProperty("alarmStatusName")
     private String getAlarmStatusName() {

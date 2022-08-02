@@ -50,6 +50,21 @@ public class Material extends BaseCreateBy {
     private String targetId;
 
     /**
+     * 产线id
+     */
+    private String lineId;
+
+    /**
+     * 评价规则实体
+     */
+    private List<EvalRule> ruleList;
+
+    /**
+     * 特征值列表
+     */
+    private List<QualityChValue> chValueList;
+
+    /**
      * 质量评价结果
      */
     private EvalResultStatusEnum evalResult;
@@ -57,7 +72,7 @@ public class Material extends BaseCreateBy {
     /**
      * 质量评价分数
      */
-    private Float evalPoint;
+    private Float evalScore;
 
 
     /**
@@ -87,6 +102,7 @@ public class Material extends BaseCreateBy {
      * TODO 需要修改数据类型为 评价对象实体类
      */
     private List<String> evaluateProps;
+
 
     // 当前工序id
     private String currentProcedureId;

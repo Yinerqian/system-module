@@ -79,5 +79,7 @@ public class EvalRule extends BaseCreateBy {
      */
     private String lineIds;
 
-    List<EvalRuleIndex> evalRuleIndexList;
+    private List<EvalRuleIndex> evalRuleIndexList;
+
+
 }

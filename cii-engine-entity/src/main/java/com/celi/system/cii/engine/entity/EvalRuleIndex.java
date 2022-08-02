@@ -59,14 +59,24 @@ public class EvalRuleIndex extends BaseCreateBy {
     // 开始点位id
     private String startPointId;
 
+    private String startPointUuid;
+
+    private String startPointName;
+
     // 结束点位id
     private String endPointId;
+
+    private String endPointUuid;
+
+    private String endPointName;
 
     // 实际的开始时间
     private Date startDate;
 
     // 实际的结束时间
     private Date endDate;
+
+    private String lineId;
 
     /**
      * 指标数据相关

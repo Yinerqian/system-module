@@ -92,7 +92,15 @@ public class ProductionLine extends BaseCreateBy {
      */
     protected List<String> pointList;
 
-
     // 该产线同时只能生产一个物料
     protected Integer singleMaterialFlag;
+
+    // 产线对应的特征值列表
+    protected List<QualityChValue> chValueList;
+
+    /**
+     * 产线开始/结束，工序/结束，评价规则开始/结束，特征值开始/结束
+     */
+    protected List<String> triggerPointList;
+
 }
