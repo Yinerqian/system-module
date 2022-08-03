@@ -15,6 +15,11 @@ import lombok.NoArgsConstructor;
 public class LineChValuePoint {
 
     /**
+     * 产线ID
+     */
+    private String LineId;
+    
+    /**
      * 特征值id
      */
     private String chValueId;
