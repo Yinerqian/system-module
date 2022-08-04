@@ -1,6 +1,8 @@
 package com.celi.system.cii.engine.entity;
 
 import com.celi.cii.base.entity.BaseCreateBy;
+import com.celi.system.cii.engine.entity.enums.ChValueTypeEnum;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +37,21 @@ public class ProcedureChValue extends BaseCreateBy {
      * 序号
      */
     private Integer orderIndex;
+
+    /**
+     * 特征值名称
+     */
+    private String chValueName;
+
+    /**
+     * 特征值类型
+     */
+    private ChValueTypeEnum chValueType;
+
+    @JsonProperty(value = "chValueTypeName")
+    public String getChValueTypeName() {
+        return this.chValueType != null ? this.chValueType.getTitle() : null ;
+    }
 
 
 }
