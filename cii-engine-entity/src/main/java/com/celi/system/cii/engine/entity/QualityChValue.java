@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @Author: Ce-li
  * @Date: 2022/7/19 11:31
@@ -61,6 +63,12 @@ public class QualityChValue extends BaseCreateBy {
      * 特征值编码
      */
     private String chValueCode;
+
+    // 跟踪引擎标记的开始时间
+    private Date startDate;
+
+    // 跟踪引擎标记的结束时间
+    private Date endDate;
 
 
     /**
