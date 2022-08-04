@@ -44,6 +44,11 @@ public class ProcedureChValue extends BaseCreateBy {
     private String chValueName;
 
     /**
+     * 特征值编码
+     */
+    private String chValueCode;
+
+    /**
      * 特征值类型
      */
     private ChValueTypeEnum chValueType;
