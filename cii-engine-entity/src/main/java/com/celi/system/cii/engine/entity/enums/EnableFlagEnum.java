@@ -16,15 +16,15 @@ public enum EnableFlagEnum implements BaseEnum {
     DISABLE("2", "禁用");
 
     private String code;
-    private String title;
+    private String desc;
 
     @Override
     public String getCode() {
-        return null;
+        return code;
     }
 
     @Override
     public String getTitle() {
-        return null;
+        return desc;
     }
 }
