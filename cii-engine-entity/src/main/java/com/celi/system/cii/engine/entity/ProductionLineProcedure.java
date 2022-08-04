@@ -75,6 +75,11 @@ public class ProductionLineProcedure extends BaseCreateBy {
 
     protected List<ProcedureKeyPoint> keyPointList;
 
+    /**
+     * 工序下特征值
+     */
+    protected List<ProcedureChValue> procedureChValueList;
+
     protected Date startTime;
 
     protected Date endTime;
