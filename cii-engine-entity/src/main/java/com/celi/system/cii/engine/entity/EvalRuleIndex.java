@@ -57,9 +57,9 @@ public class EvalRuleIndex extends BaseCreateBy {
     /**
      * 关联的特征值json，含chValueId、name、uuid、别名
      */
-    private String chValueJson;
+    private String chValueJson;    private List<EvalChValueConfig> ruleIndexChValueConfigList;
 
-    private List<EvalChValueConfig> ruleIndexChValueConfigList;
+
 
     // 开始点位id
     private String startPointId;
