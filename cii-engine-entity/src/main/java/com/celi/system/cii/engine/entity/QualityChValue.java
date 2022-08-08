@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: Ce-li
@@ -69,6 +70,9 @@ public class QualityChValue extends BaseCreateBy {
 
     // 跟踪引擎标记的结束时间
     private Date endDate;
+
+    // 特征值关联的点位、别名列表
+    private List<EvalPointConfig> evalPointConfigList;
 
 
     /**
