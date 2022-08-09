@@ -2,6 +2,7 @@ package com.celi.system.cii.engine.entity;
 
 import com.celi.cii.base.entity.BaseCreateBy;
 import com.celi.system.cii.engine.entity.enums.EvalIndexModeEnum;
+import com.celi.system.cii.engine.entity.enums.EvalResultStatusEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -93,6 +94,14 @@ public class EvalRuleIndex extends BaseCreateBy {
     private EvalIndexModeEnum indexMode;
 
     private String indexCode;
+
+    /*
+    单项指标的分数
+     */
+    private Float evalIndexScore;
+
+
+    private EvalResultStatusEnum evalIndexResult;
 
     @JsonProperty(value = "modeName")
     public String getModeName() {
