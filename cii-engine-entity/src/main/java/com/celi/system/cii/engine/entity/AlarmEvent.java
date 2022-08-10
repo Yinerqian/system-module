@@ -28,6 +28,16 @@ public class AlarmEvent extends BaseCreateBy {
 
 
     /**
+     * 告警规则Id
+     */
+    private String ruleId;
+
+    /**
+     * 告警规则名称，冗余字段
+     */
+    private String ruleName;
+
+    /**
      * 告警规则等级id
      */
     private String levelId;

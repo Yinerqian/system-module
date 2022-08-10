@@ -47,6 +47,11 @@ public class MonitorPoint extends BaseCreateBy {
      */
     private String alarmRuleId;
 
+    private String ruleName;
+
+    private String levelName;
+
+    private String levelColor;
 
     /**
      * 启用状态 1-启用 0-禁用
