@@ -10,9 +10,7 @@ public class EvalChValueConfig {
 
     private String chValueId;
 
-    private String pointUuid;
-
-    private String pointName;
+    private String chValueName;
 
     private String alias;
 
