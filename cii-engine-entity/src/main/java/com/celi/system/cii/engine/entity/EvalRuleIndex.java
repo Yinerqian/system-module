@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -94,9 +96,15 @@ public class EvalRuleIndex extends BaseCreateBy {
 
     private String indexCode;
 
+    private Map<String, Object> res;
+
     @JsonProperty(value = "modeName")
     public String getModeName() {
         return this.indexMode != null ? this.indexMode.getTitle() : null;
     }
+
+    /**
+     * 规则计算结果
+     */
 
 }
