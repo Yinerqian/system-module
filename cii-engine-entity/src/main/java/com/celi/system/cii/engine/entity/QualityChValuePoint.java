@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Deprecated
-public class LineChValuePoint {
+public class QualityChValuePoint {
 
     /**
      * 产线ID

@@ -35,6 +35,16 @@ public class Material extends BaseCreateBy {
     private String materialCode;
 
     /**
+     * 钢种
+     */
+    private String steelGrade;
+
+    /**
+     * 规格 （用json）MaterialSpecs类
+     */
+    private String specs;
+
+    /**
      * 手动修改前的物料号
      */
     private String beforeChangeMaterialCode;

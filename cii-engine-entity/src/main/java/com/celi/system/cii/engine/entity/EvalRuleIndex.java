@@ -98,13 +98,17 @@ public class EvalRuleIndex extends BaseCreateBy {
 
     private Map<String, Object> res;
 
+    /*
+    单项指标的分数
+     */
+    private Float evalIndexScore;
+
+
+    private EvalResultStatusEnum evalIndexResult;
+
     @JsonProperty(value = "modeName")
     public String getModeName() {
         return this.indexMode != null ? this.indexMode.getTitle() : null;
     }
-
-    /**
-     * 规则计算结果
-     */
 
 }
