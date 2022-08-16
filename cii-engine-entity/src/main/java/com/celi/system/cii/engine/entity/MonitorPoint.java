@@ -35,6 +35,15 @@ public class MonitorPoint extends BaseCreateBy {
      */
     private String productionLineGroupId;
 
+    /**
+     * 产线Id集合
+     */
+    private String lineIds;
+
+    /**
+     * 产线名称
+     */
+    private String lineName;
 
     /**
      * 工序id
