@@ -14,7 +14,9 @@ public enum BasicModeEnum implements BaseEnum {
     AVG("AVG", "平均值"),
     MAX("MAX", "最大值"),
     MIN("MIN", "最小值"),
-    MEDIAN("MEDIAN", "中位数");
+    MEDIAN("MEDIAN", "中位数"),
+    MAXIMUM_DIFF("MAXIMUM_DIFF", "最大差值"),
+    MINIMUM_DIFF("MINIMUM_DIFF", "最小差值");
 
     private String code;
     private String desc;
