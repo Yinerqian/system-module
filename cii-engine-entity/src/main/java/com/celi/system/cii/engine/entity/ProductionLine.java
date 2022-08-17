@@ -19,6 +19,8 @@ public class ProductionLine extends BaseCreateBy {
      */
     protected String lineId;
 
+    protected String lineCode;
+
     /**
      * 父分组id
      */
