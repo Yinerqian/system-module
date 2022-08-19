@@ -113,6 +113,8 @@ public class Material extends BaseCreateBy {
      */
     private List<String> evaluateProps;
 
+    // 分组求和
+    private Integer count;
 
     // 当前工序id
     private String currentProcedureId;
