@@ -49,4 +49,18 @@ public class EvalTarget extends BaseCreateBy {
      * 长度数据标记，1-包含 0-不包含
      */
     private Integer lengthDataFlag;
+
+    // 是否默认选中，默认0-不默认
+    private Integer defaultFlag;
+
+    private Boolean defaultFlagChecked;
+
+    public Boolean getDefaultFlagChecked() {
+        return Integer.valueOf(1).equals(defaultFlag);
+    }
+
+    public void setDefaultFlagChecked(Boolean defaultFlagChecked) {
+        this.defaultFlagChecked = defaultFlagChecked;
+        this.defaultFlag = defaultFlagChecked ? 1 : 0;
+    }
 }
