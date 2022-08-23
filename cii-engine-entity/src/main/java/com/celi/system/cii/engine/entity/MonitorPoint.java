@@ -50,6 +50,8 @@ public class MonitorPoint extends BaseCreateBy {
      */
     private String procedureId;
 
+    // 工序名称
+    private String procedureName;
 
     /**
      * 告警规则ID
@@ -57,6 +59,8 @@ public class MonitorPoint extends BaseCreateBy {
     private String alarmRuleId;
 
     private String ruleName;
+
+    private String advanceModeJson;
 
     private String levelName;
 
