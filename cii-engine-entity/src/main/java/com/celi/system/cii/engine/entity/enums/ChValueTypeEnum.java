@@ -12,7 +12,7 @@ import lombok.Getter;
 public enum ChValueTypeEnum implements BaseEnum {
 
     BASIC_FEATURES_VALUE("1", "基本特征值"),
-    SPACE_TIME_FEATURES_VALUE("2", "时空转换特征值");
+    SPACE_TIME_FEATURES_VALUE("2", "时空转换");
 
     private String code;
     private String desc;

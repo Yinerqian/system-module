@@ -59,6 +59,8 @@ public class Material extends BaseCreateBy {
      */
     private String targetId;
 
+    private String targetName;
+
     /**
      * 产线id
      */
