@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 物料信息
@@ -140,6 +141,14 @@ public class Material extends BaseCreateBy {
     public String getProductionStatusName() {
         return productionStatus == null ? null : productionStatus.getTitle();
     }
+
+    @JsonProperty(value = "evalResultName")
+    public String evalResultName() {
+        return evalResult == null ? null : evalResult.getTitle();
+    }
+
+    // 预存的一些属性 比如命中率计算需要，宽度容忍范围之类
+    private Map<String, Object> props;
 
 //    public String getOnePrevMaterialId() {
 //        return CollUtil.isNotEmpty(prevMaterialIdList) ? prevMaterialIdList.get(0) : null;
