@@ -1,10 +1,12 @@
 package com.celi.system.cii.engine.entity;
 
 import com.celi.cii.base.entity.BaseCreateBy;
+import com.celi.system.cii.engine.entity.enums.EvalResultStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
 
 /**
  * @Author: Ce-li
@@ -40,27 +42,42 @@ public class QualityBaseData extends BaseCreateBy {
      */
     private String steelName;
 
+    /**
+     * 质量评价结果
+     */
+    private EvalResultStatusEnum evalResult;
+
+    /**
+     * 钢种
+     */
+    private String steelGrade;
+
+    /**
+     * 规格 （用json）MaterialSpecs类
+     */
+    private String specs;
+
 
     /**
      * 长
      */
-    private String length;
+    private BigDecimal length;
 
 
     /**
      * 宽
      */
-    private String width;
+    private BigDecimal width;
 
 
     /**
      * 厚
      */
-    private String height;
+    private BigDecimal height;
 
 
     /**
      * 重量
      */
-    private String weight;
+    private BigDecimal weight;
 }

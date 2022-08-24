@@ -57,7 +57,7 @@ public interface PermissionRepository extends JpaRepository<Permission, String> 
             "        FROM sys_permission sp\n" +
             "        JOIN sys_app_permission_role sapr ON sp.PERMISSION_ID = sapr.PERMISSION_ID\n" +
             "        JOIN sys_app sa ON sapr.app_id = sa.app_id and sa.app_code = :appCode\n" +
-            "        JOIN sys_user_role sur ON sapr.role_id = sur.role_id and sur.user_id = :userId\n" +
+            "        JOIN sys_user_role sur ON sapr.role_id = sur.role_id and sur.user_id = :userId and sur.tenant_id = :tenantId\n" +
             "        JOIN sys_permission_group spg ON sp.group_id = spg.group_id\n" +
             "        JOIN sys_role_app sra ON sra.app_id = sa.app_id AND sra.role_id = sapr.role_id\n" +
             "        WHERE sp.PERMISSION_TYPE = 'MENU'\n" +
@@ -65,5 +65,5 @@ public interface PermissionRepository extends JpaRepository<Permission, String> 
             "        and sp.DEL_FLAG = 0\n" +
             "        and spg.DEL_FLAG = 0\n" +
             "        ORDER BY sp.CREATE_DATE ASC")
-    List<Map<String, Object>> listAppMenusByUserId(@Param("userId") Integer userId, @Param("appCode") String appCode);
+    List<Map<String, Object>> listAppMenusByUserId(@Param("tenantId") Integer tenantId, @Param("userId") Integer userId, @Param("appCode") String appCode);
 }

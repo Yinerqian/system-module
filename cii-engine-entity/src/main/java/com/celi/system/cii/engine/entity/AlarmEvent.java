@@ -60,6 +60,10 @@ public class AlarmEvent extends BaseCreateBy {
      */
     private String lineId;
 
+    /**
+     * 产线Id集合
+     */
+    private String lineIds;
 
     /**
      * 产线名称

@@ -32,8 +32,8 @@ public class PermissionService {
         return permissionRepository.listAllAppMenus(appCode);
     }
 
-    public List<Permission> listAppMenusByUserId(Integer userId, String appCode) {
-        List<Map<String, Object>> maps = permissionRepository.listAppMenusByUserId(userId, appCode);
+    public List<Permission> listAppMenusByUserId(Integer tenantId, Integer userId, String appCode) {
+        List<Map<String, Object>> maps = permissionRepository.listAppMenusByUserId(tenantId, userId, appCode);
         List<Permission> target = new ArrayList<>(maps.size());
         // JPA 对于 join 的字段无法正常映射到实体类，这里使用 Map + JSON 进行转化
         maps.forEach(permission -> target.add(JSONUtil.parse(JSONUtil.toJsonStr(permission)).toBean(Permission.class)));

@@ -39,6 +39,11 @@ public class QualityChValue extends BaseCreateBy {
      */
     private String lineId;
 
+    /**
+     * 产线Id集合
+     */
+    private String lineIds;
+
     private String lineName;
 
     /**

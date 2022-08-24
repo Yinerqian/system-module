@@ -83,7 +83,7 @@ public class OAuthService {
         }
     }
 
-    public List<PermissionGroup> listAppMenusByUserId(Integer userId, String appCode) {
+    public List<PermissionGroup> listAppMenusByUserId(Integer tenantId, Integer userId, String appCode) {
         // 1. 查询 appId
 //        App app = AppService.getAppByCode(appCode);
 //        if (app == null) {
@@ -104,7 +104,7 @@ public class OAuthService {
             // 如果是平台管理员，则获取所有菜单权限
             permissions = permissionService.listAllAppMenus(appCode);
         } else {
-            permissions = permissionService.listAppMenusByUserId(userId, appCode);
+            permissions = permissionService.listAppMenusByUserId(tenantId, userId, appCode);
         }
 
         Map<Integer, List<Permission>> collect = permissions.stream().collect(Collectors.groupingBy(Permission::getGroupId));

@@ -104,8 +104,10 @@ public class EvalRuleIndex extends BaseCreateBy {
      */
     private Float evalIndexScore;
 
-
     private EvalResultStatusEnum evalIndexResult;
+
+    // 计算结果存储
+    private Map<String, Object> res;
 
     @JsonProperty(value = "modeName")
     public String getModeName() {

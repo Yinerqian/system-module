@@ -35,12 +35,23 @@ public class MonitorPoint extends BaseCreateBy {
      */
     private String productionLineGroupId;
 
+    /**
+     * 产线Id集合
+     */
+    private String lineIds;
+
+    /**
+     * 产线名称
+     */
+    private String lineName;
 
     /**
      * 工序id
      */
     private String procedureId;
 
+    // 工序名称
+    private String procedureName;
 
     /**
      * 告警规则ID
@@ -48,6 +59,8 @@ public class MonitorPoint extends BaseCreateBy {
     private String alarmRuleId;
 
     private String ruleName;
+
+    private String advanceModeJson;
 
     private String levelName;
 
@@ -69,6 +82,11 @@ public class MonitorPoint extends BaseCreateBy {
      * 备注
      */
     private String remark;
+
+    /**
+     * 监控点位Json
+     */
+    private String monitorPointConfig;
 
     @JsonProperty("enableName")
     private String getEnableName() {
