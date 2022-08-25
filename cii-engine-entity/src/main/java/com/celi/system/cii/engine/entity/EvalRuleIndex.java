@@ -3,11 +3,13 @@ package com.celi.system.cii.engine.entity;
 import com.celi.cii.base.entity.BaseCreateBy;
 import com.celi.system.cii.engine.entity.enums.EvalIndexModeEnum;
 import com.celi.system.cii.engine.entity.enums.EvalResultStatusEnum;
+import com.celi.system.cii.engine.entity.utils.EvalResultUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Slf4j
 public class EvalRuleIndex extends BaseCreateBy {
 
     /**
@@ -109,6 +112,28 @@ public class EvalRuleIndex extends BaseCreateBy {
     @JsonProperty(value = "modeName")
     public String getModeName() {
         return this.indexMode != null ? this.indexMode.getTitle() : null;
+    }
+
+    public Float getEvalIndexScore() {
+        // 获取引擎计算的res
+        if (res != null) {
+            Object score = res.get("score");
+            if (score != null) {
+                try {
+                    return Float.parseFloat(score.toString());
+                } catch (Exception e) {
+                    log.error("解析res score失败=== {}", e.getCause());
+                }
+            }
+        }
+
+        return evalIndexScore;
+    }
+
+
+    @JsonProperty(value = "resultName")
+    public String resultName() {
+        return evalIndexResult == null ? null : evalIndexResult.getTitle();
     }
 
 }
