@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -122,16 +123,19 @@ public class QualityChValue extends BaseCreateBy {
      */
     private String endPointId;
 
-
+    // 特征值曲线的数组，形如[[0, 5.1], [10000, 4.9]]
+    private List<List> resultArray = new ArrayList<>();
 
     @JsonProperty(value = "chValueTypeName")
     public String getChValueTypeName() {
         return this.chValueType != null ? this.chValueType.getTitle() : null ;
     }
+
     @JsonProperty(value = "chValueModelName")
     public String getChValueModelName() {
         return this.chValueMode != null ? this.chValueMode.getTitle() : null ;
     }
+
     @JsonProperty(value = "basicModeName")
     public String getBasicModeName() {
         return this.basicMode != null ? this.basicMode.getTitle() : null ;

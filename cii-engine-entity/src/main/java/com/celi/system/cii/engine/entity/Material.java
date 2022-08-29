@@ -137,6 +137,9 @@ public class Material extends BaseCreateBy {
     // 下游产线Id
     private List<String> nextLineIdList;
 
+    // 特征值计算结果列表（由引擎计算而来）
+    private List<QualityChValue> chValueResult = new ArrayList<>();
+
     @JsonProperty(value = "productionStatusName")
     public String getProductionStatusName() {
         return productionStatus == null ? null : productionStatus.getTitle();

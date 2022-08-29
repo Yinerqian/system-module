@@ -130,6 +130,36 @@ public class EvalRuleIndex extends BaseCreateBy {
         return evalIndexScore;
     }
 
+    public String getChValueName() {
+        if (res != null) {
+            Object result = res.get("chValueName");
+            if (result != null) {
+                try {
+                    return result.toString();
+                } catch (Exception e) {
+                    log.error("解析res getChValueName失败=== {}", e.getCause());
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public List getChValueResult() {
+        if (res != null) {
+            Object result = res.get("chValueResult");
+            if (result != null) {
+                try {
+                    return (List) result;
+                } catch (Exception e) {
+                    log.error("解析res getChValueResult 失败=== {}", e.getCause());
+                }
+            }
+        }
+
+        return null;
+    }
+
 
     @JsonProperty(value = "resultName")
     public String resultName() {
