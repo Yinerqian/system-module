@@ -2,6 +2,7 @@ package com.celi.system.cii.engine.entity;
 
 import com.celi.cii.base.entity.BaseCreateBy;
 import com.celi.system.cii.engine.entity.enums.EvalResultStatusEnum;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +31,11 @@ public class QualityBaseData extends BaseCreateBy {
      * 产线Id
      */
     private String lineId;
+
+    /**
+     * 产线Id集合
+     */
+    private String lineIds;
 
     /**
      * 物料编号
@@ -80,4 +86,9 @@ public class QualityBaseData extends BaseCreateBy {
      * 重量
      */
     private BigDecimal weight;
+
+    @JsonProperty(value = "evalResultName")
+    private String getEvalResultName() {
+        return this.evalResult != null ? this.evalResult.getTitle() : null;
+    }
 }
