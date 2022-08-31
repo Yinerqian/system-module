@@ -65,6 +65,6 @@ public interface PermissionRepository extends JpaRepository<Permission, String> 
             "        and sp.DEL_FLAG = 0\n" +
             "        and spg.DEL_FLAG = 0\n" +
             "        GROUP BY sp.permission_id" +
-            "        ORDER BY sp.CREATE_DATE ASC")
+            "        ORDER BY sp.SORT ASC")
     List<Map<String, Object>> listAppMenusByUserId(@Param("tenantId") Integer tenantId, @Param("userId") Integer userId, @Param("appCode") String appCode);
 }
