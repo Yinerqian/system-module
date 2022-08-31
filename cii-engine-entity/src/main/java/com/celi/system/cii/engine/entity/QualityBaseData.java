@@ -28,30 +28,9 @@ public class QualityBaseData extends BaseCreateBy {
     private String materialId;
 
     /**
-     * 产线Id
-     */
-    private String lineId;
-
-    /**
-     * 产线Id集合
-     */
-    private String lineIds;
-
-    /**
      * 物料编号
      */
     private String materialCode;
-
-
-    /**
-     * 钢种名称
-     */
-    private String steelName;
-
-    /**
-     * 质量评价结果
-     */
-    private EvalResultStatusEnum evalResult;
 
     /**
      * 钢种
@@ -63,29 +42,50 @@ public class QualityBaseData extends BaseCreateBy {
      */
     private String specs;
 
+    /**
+     * 评价对象
+     */
+    private String targetName;
+
+    /**
+     * 产线Id
+     */
+    private String lineId;
+
+    /**
+     * 产线Id集合
+     */
+    private String lineIds;
+
+
+    /**
+     * 质量评价结果
+     */
+    private EvalResultStatusEnum evalResult;
+
 
     /**
      * 长
      */
-    private BigDecimal length;
+    private Float length;
 
 
     /**
      * 宽
      */
-    private BigDecimal width;
+    private Float width;
 
 
     /**
      * 厚
      */
-    private BigDecimal height;
+    private Float height;
 
 
     /**
-     * 重量
+     * 厚度
      */
-    private BigDecimal weight;
+    private Float thickness;
 
     @JsonProperty(value = "evalResultName")
     private String getEvalResultName() {
