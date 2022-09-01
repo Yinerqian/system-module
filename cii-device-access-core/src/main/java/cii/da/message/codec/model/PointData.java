@@ -3,13 +3,14 @@ package cii.da.message.codec.model;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.concurrent.Delayed;
 
 /**
  * 二级发过来的数据结构
  */
 @Data
-public class PointData extends PointBase implements Cloneable {
+public class PointData extends PointBase implements Cloneable,Comparable<PointData> {
 
     private String code;
 
@@ -79,9 +80,11 @@ public class PointData extends PointBase implements Cloneable {
             PointData clone = (PointData) super.clone();
             return clone;
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
+            throw new AssertionError();}
     }
 
-
+    @Override
+    public int compareTo(PointData o) {
+        return (int)(o.getTs().getTime()-this.getTs().getTime());
+    }
 }
