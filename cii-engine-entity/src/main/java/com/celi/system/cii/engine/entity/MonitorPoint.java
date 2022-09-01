@@ -83,10 +83,6 @@ public class MonitorPoint extends BaseCreateBy {
      */
     private String remark;
 
-    /**
-     * 监控点位Json
-     */
-    private String monitorPointConfig;
 
     @JsonProperty("enableName")
     private String getEnableName() {
