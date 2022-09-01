@@ -125,6 +125,11 @@ public class AlarmEvent extends BaseCreateBy {
     private Integer alarmCount;
 
     /**
+     * COUNT 总数
+     */
+    private Integer count;
+
+    /**
      * 恢复时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
