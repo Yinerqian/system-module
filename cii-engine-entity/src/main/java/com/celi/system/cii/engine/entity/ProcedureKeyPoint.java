@@ -1,9 +1,10 @@
 package com.celi.system.cii.engine.entity;
 
+import com.celi.cii.base.entity.BaseCreateBy;
 import lombok.Data;
 
 @Data
-public class ProcedureKeyPoint {
+public class ProcedureKeyPoint extends BaseCreateBy {
 
     // 关键id
     private String keyId;
