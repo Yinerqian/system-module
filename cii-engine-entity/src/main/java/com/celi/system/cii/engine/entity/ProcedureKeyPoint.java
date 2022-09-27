@@ -30,6 +30,6 @@ public class ProcedureKeyPoint extends BaseCreateBy {
     // 产线id
     private String lineId;
 
-    // 租户ID
-    private Integer tenantId;
+//    // 租户ID
+//    private Integer tenantId;
 }
