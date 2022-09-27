@@ -1,9 +1,10 @@
 package com.celi.system.cii.engine.entity;
 
+import com.celi.cii.base.entity.BaseCreateBy;
 import lombok.Data;
 
 @Data
-public class EvalChValueConfig {
+public class EvalChValueConfig extends BaseCreateBy {
 
     // 父对象id
     private String parentId;
