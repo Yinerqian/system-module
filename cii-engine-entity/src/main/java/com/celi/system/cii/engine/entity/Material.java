@@ -169,6 +169,9 @@ public class Material extends BaseCreateBy {
     // 预存的一些属性 比如命中率计算需要，宽度容忍范围之类
     private Map<String, Object> props;
 
+    // 存储质量分析结果，影响因子和缺陷分析结果
+    private AnalyseResult analyseResult;
+
 //    public String getOnePrevMaterialId() {
 //        return CollUtil.isNotEmpty(prevMaterialIdList) ? prevMaterialIdList.get(0) : null;
 //    }
