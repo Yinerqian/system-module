@@ -18,17 +18,3 @@ public class AnalyseResult {
     List<InfluenceValue> valueList;
 }
 
-@Data
-class InfluenceValue {
-    // 影响因子
-    String influenceName;
-
-    // 当前物料
-    String analyseValue;
-
-    // 优秀样本平均
-    String bestValue;
-
-    // 偏差
-    String deviation;
-}
