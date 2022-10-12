@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.celi.cii.base.entity.BaseCreateBy;
 import com.celi.system.cii.engine.entity.enums.EvalResultStatusEnum;
 import com.celi.system.cii.engine.entity.enums.MaterialProductionStatusEnum;
+import com.celi.system.cii.engine.entity.enums.QualityAnalysisStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -68,6 +69,11 @@ public class Material extends BaseCreateBy {
     private String lineId;
 
     /**
+     * 产线Id集合
+     */
+    private String lineIds;
+
+    /**
      * 评价规则实体
      */
     private List<EvalRule> ruleList;
@@ -81,6 +87,11 @@ public class Material extends BaseCreateBy {
      * 质量评价结果
      */
     private EvalResultStatusEnum evalResult;
+
+    /**
+     * 分析状态
+     */
+    private QualityAnalysisStatusEnum  analysisStatus;
 
     /**
      * 质量评价分数
@@ -150,8 +161,16 @@ public class Material extends BaseCreateBy {
         return evalResult == null ? null : evalResult.getTitle();
     }
 
+    @JsonProperty(value = "analysisStatusName")
+    public String analysisStatusName() {
+        return analysisStatus == null ? null : analysisStatus.getTitle();
+    }
+
     // 预存的一些属性 比如命中率计算需要，宽度容忍范围之类
     private Map<String, Object> props;
+
+    // 存储质量分析结果，影响因子和缺陷分析结果
+    private AnalyseResult analyseResult;
 
 //    public String getOnePrevMaterialId() {
 //        return CollUtil.isNotEmpty(prevMaterialIdList) ? prevMaterialIdList.get(0) : null;

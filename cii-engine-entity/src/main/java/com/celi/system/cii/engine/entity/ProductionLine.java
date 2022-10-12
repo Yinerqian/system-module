@@ -17,92 +17,92 @@ public class ProductionLine extends BaseCreateBy {
     /**
      * 产线id
      */
-    protected String lineId;
+    private String lineId;
 
-    protected String lineCode;
+    private String lineCode;
 
     /**
      * 父分组id
      */
-    protected String parentLineId;
+    private String parentLineId;
 
     /**
      * 产线名称
      */
-    protected String lineName;
+    private String lineName;
 
     /**
      * 序号
      */
-    protected Integer orderIndex;
+    private Integer orderIndex;
 
     /**
      * 消息主题
      */
-    protected String messageTopic;
+    private String messageTopic;
 
     /**
      * 上游产线id
      */
-    protected String preLineId;
+    private String preLineId;
 
     /**
      * 下游产线id
      */
-    protected String nextLineId;
+    private String nextLineId;
 
     /**
      * 评价对象id
      */
-    protected String targetId;
+    private String targetId;
 
     /**
      * 备注
      */
-    protected String remark;
+    private String remark;
     
     /**
      * 图标
      */
-    protected String icon;
+    private String icon;
 
-    protected String startPointId;
+    private String startPointId;
 
-    protected String endPointId;
+    private String endPointId;
 
-    protected String startPointName;
+    private String startPointName;
 
-    protected String endPointName;
+    private String endPointName;
 
     /**
      * 开始信号uuid join字段
      */
-    protected String startPointUuid;
+    private String startPointUuid;
 
     /**
      * 结束信号Uuid join字段
      */
-    protected String endPointUuid;
+    private String endPointUuid;
 
     /**
      * 产线下工序列表
      */
-    protected List<ProductionLineProcedure> procedureList;
+    private List<ProductionLineProcedure> procedureList;
 
     /**
      * 产线下点位 (uuid) 列表
      */
-    protected List<String> pointList;
+    private List<String> pointList;
 
     // 该产线同时只能生产一个物料
-    protected Integer singleMaterialFlag;
+    private Integer singleMaterialFlag;
 
     // 产线对应的特征值列表
-    protected List<QualityChValue> chValueList;
+    private List<QualityChValue> chValueList;
 
     /**
      * 产线开始/结束，工序/结束，评价规则开始/结束，特征值开始/结束
      */
-    protected List<String> triggerPointList;
+    private List<String> triggerPointList;
 
 }

@@ -69,6 +69,7 @@
         <module>cii-engine-entity</module>
         <module>cii-common</module>
         <module>cii-device-access-core</module>
+        <module>cii-permission</module>
     </modules>
 
     <packaging>pom</packaging>

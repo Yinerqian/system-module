@@ -6,17 +6,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BaseCreateBy  {
+public class BaseCreateBy implements Serializable {
 
     public static final Integer DELETED = 1;
     public static final Integer UN_DELETED = 0;
 
     protected Integer tenantId;
-    
+
     protected Integer delFlag;
 
     protected Integer createBy;

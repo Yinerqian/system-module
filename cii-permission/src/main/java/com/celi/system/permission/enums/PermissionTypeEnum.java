@@ -1,25 +1,19 @@
-package com.celi.system.cii.engine.entity.enums;
+package com.celi.system.permission.enums;
 
 import com.celi.cii.base.entity.BaseEnum;
 import lombok.Getter;
 
-/**
- * @Author: Ce-li
- * @Date: 2022/7/19 15:33
- * 特征值类型
- */
 @Getter
-public enum ChValueTypeEnum implements BaseEnum {
+public enum PermissionTypeEnum implements BaseEnum {
 
-    BASIC_FEATURES_VALUE("1", "基本特征值"),
-    SPACE_TIME_FEATURES_VALUE("2", "时空转换"),
-    INFLUENCE_FACTOR_VALUE("3", "影响因子");
+    MENU("MENU", "菜单"),
+    OP("OP", "操作"),
+    ;
 
     private String code;
     private String desc;
 
-
-    ChValueTypeEnum(String code, String desc) {
+    PermissionTypeEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }
@@ -28,6 +22,7 @@ public enum ChValueTypeEnum implements BaseEnum {
         return code;
     }
 
+    @Override
     public String getTitle() {
         return desc;
     }
