@@ -25,7 +25,7 @@ public class ApiSysService {
 
     public SysUser  getUserById(String masterKey) {
         String url = String.format("%s/cii-sys/api-user/getUserById", platUrl);
-        HttpRequest request = HttpRequest.get(platUrl).header("masterKey", masterKey);
+        HttpRequest request = HttpRequest.get(url).header("masterKey", masterKey);
         SysUser sysUser = JSONUtil.toBean(request.execute().body(), SysUser.class);
         return sysUser;
     }
