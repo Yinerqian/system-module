@@ -100,8 +100,6 @@ public class EvalRuleIndex extends BaseCreateBy {
 
     private String indexCode;
 
-    private Map<String, Object> res;
-
     /*
     单项指标的分数
      */
