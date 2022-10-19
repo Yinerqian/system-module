@@ -1,6 +1,5 @@
 package com.celi.system.permission.enity;
 
-import com.celi.cii.base.entity.BaseCreateBy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

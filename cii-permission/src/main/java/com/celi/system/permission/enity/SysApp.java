@@ -1,6 +1,5 @@
 package com.celi.system.permission.enity;
 
-import com.celi.cii.base.entity.BaseCreateBy;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

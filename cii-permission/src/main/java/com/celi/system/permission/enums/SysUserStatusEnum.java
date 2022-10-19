@@ -1,6 +1,5 @@
 package com.celi.system.permission.enums;
 
-import com.celi.cii.base.entity.BaseEnum;
 import lombok.Getter;
 
 @Getter

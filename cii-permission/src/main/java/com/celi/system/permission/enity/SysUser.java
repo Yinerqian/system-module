@@ -1,7 +1,5 @@
 package com.celi.system.permission.enity;
 
-import com.celi.cii.base.constant.ConstantUtils;
-import com.celi.cii.base.entity.BaseCreateBy;
 import com.celi.system.permission.enums.SysUserStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
