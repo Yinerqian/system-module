@@ -2,6 +2,8 @@ package com.celi.system.cii.engine.entity;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * 评价概览
  */
@@ -19,4 +21,13 @@ public class EvalOverview {
 
     // 评价规则
     private Integer ruleCount;
+
+    // 评价结果总数
+    private Integer evalCount;
+
+    // 不合格总数
+    private Integer unqualifiedCount;
+
+    // 不合格率
+    private BigDecimal rejectionRate;
 }
