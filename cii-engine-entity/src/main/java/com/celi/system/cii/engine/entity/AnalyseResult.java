@@ -17,5 +17,7 @@ public class AnalyseResult implements Serializable {
     List<String> defectValue;
 
     List<InfluenceValue> valueList;
+
+    List<FishBoneData> fishBoneData;
 }
 
