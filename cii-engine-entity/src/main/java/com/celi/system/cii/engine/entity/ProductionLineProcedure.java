@@ -73,6 +73,11 @@ public class ProductionLineProcedure extends BaseCreateBy {
      */
     private List<PointData> pointList;
 
+    /*
+    * 额外需要记录的点位信息
+    * */
+    private String extraPoints;
+
     private List<ProcedureKeyPoint> keyPointList;
 
     /**
