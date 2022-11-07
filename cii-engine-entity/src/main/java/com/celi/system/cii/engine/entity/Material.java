@@ -172,6 +172,9 @@ public class Material extends BaseCreateBy {
     // 存储质量分析结果，影响因子和缺陷分析结果
     private AnalyseResult analyseResult;
 
+    // 备注信息
+    private String remark;
+
 //    public String getOnePrevMaterialId() {
 //        return CollUtil.isNotEmpty(prevMaterialIdList) ? prevMaterialIdList.get(0) : null;
 //    }
