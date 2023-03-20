@@ -36,6 +36,12 @@ public class Material extends BaseCreateBy {
      */
     private String materialCode;
 
+
+    /**
+     * 批次跟踪对象 Id（如果存在批次跟踪情况）
+     */
+    private String batchTraceId;
+
     /**
      * 钢种
      */
