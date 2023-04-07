@@ -38,9 +38,9 @@ public class Material extends BaseCreateBy {
 
 
     /**
-     * 批次跟踪对象 Id（如果存在批次跟踪情况）
+     * 跟踪计划 Id（如果存在批次跟踪情况）
      */
-    private String batchTraceId;
+    private String planId;
 
     /**
      * 钢种
@@ -138,6 +138,9 @@ public class Material extends BaseCreateBy {
 
     // 当前工序id
     private String currentProcedureId;
+
+    // 当前工序次序
+    private String currentProcedureIndex;
 
     // 当前产线物料的生产状态
     private MaterialProductionStatusEnum productionStatus;
