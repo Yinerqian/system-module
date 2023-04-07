@@ -5,14 +5,12 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import com.celi.system.crypto.BCryptPasswordEncoder;
-import com.celi.system.dto.ResponseDTO;
 import com.celi.system.entity.*;
-import com.celi.system.enums.PermissionTypeEnum;
 import com.celi.system.enums.ServiceCode;
+import com.celi.system.enums.UserStatusEnum;
 import com.celi.system.exception.AuthenticationException;
 import com.celi.system.utils.DateUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -40,6 +38,9 @@ public class OAuthService {
             throw new AuthenticationException(ServiceCode.UNKNOWN_USER.getMessage());
         }
 
+        if (userInfo.getDisabled() == UserStatusEnum.DISABLED) {
+            throw new AuthenticationException("用户已被禁用，请联系管理员");
+        }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         boolean isPasswordCorrect = encoder.matches(userLoginEntity.getPassword(), userInfo.getPassword());
         if (!isPasswordCorrect) {
