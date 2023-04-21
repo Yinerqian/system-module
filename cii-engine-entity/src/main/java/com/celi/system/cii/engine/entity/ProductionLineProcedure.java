@@ -88,4 +88,9 @@ public class ProductionLineProcedure extends BaseCreateBy {
     private Date startTime;
 
     private Date endTime;
+
+    /**
+     * 时间阈值，超过阈值自动判废，单位：秒（s）
+     */
+    private Integer timeThreshold;
 }
