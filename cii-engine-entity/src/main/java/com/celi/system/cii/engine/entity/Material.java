@@ -140,7 +140,7 @@ public class Material extends BaseCreateBy {
     private String currentProcedureId;
 
     // 当前工序次序
-    private String currentProcedureIndex;
+    private Integer currentProcedureIndex;
 
     // 当前产线物料的生产状态
     private MaterialProductionStatusEnum productionStatus;
