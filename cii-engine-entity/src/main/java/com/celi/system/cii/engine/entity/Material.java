@@ -184,6 +184,9 @@ public class Material extends BaseCreateBy {
     // 备注信息
     private String remark;
 
+    // 物料所处位置（结合工序可精确物料所处产线的具体位置）
+    private String zone;
+
 //    public String getOnePrevMaterialId() {
 //        return CollUtil.isNotEmpty(prevMaterialIdList) ? prevMaterialIdList.get(0) : null;
 //    }
