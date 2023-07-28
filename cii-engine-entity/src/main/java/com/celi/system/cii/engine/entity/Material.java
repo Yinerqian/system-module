@@ -42,6 +42,8 @@ public class Material extends BaseCreateBy {
      */
     private String planId;
 
+    private String nextPlanId;
+
     /**
      * 钢种
      */

@@ -11,6 +11,7 @@ public enum MaterialProductionStatusEnum implements BaseEnum {
     IN_PRODUCTION("IN_PRODUCTION", "生产中"),
     FINISH("FINISH", "生产结束"),
     DROP("DROP", "吊销"),
+    WAIT_OFFLINE("WAIT_OFFLINE", "待下线"),
     OFFLINE("OFFLINE", "下线"),
     EXCEPTION("EXCEPTION", "跟踪异常")
     ;
