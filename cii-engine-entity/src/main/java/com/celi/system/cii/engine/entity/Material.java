@@ -44,6 +44,11 @@ public class Material extends BaseCreateBy {
 
     private String nextPlanId;
 
+    /*
+     * 原始计划 Id
+     * */
+    private String originPlanId;
+
     /**
      * 钢种
      */
@@ -99,7 +104,7 @@ public class Material extends BaseCreateBy {
     /**
      * 分析状态
      */
-    private QualityAnalysisStatusEnum  analysisStatus;
+    private QualityAnalysisStatusEnum analysisStatus;
 
     /**
      * 质量评价分数
