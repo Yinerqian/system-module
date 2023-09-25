@@ -3,10 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <artifactId>system-parent</artifactId>
+        <groupId>com.celi</groupId>
+        <version>${revision}</version>
+    </parent>
+
     <groupId>com.celi</groupId>
     <artifactId>system-user</artifactId>
     <name>system-user</name>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <description>用户模块</description>
     <properties>
         <java.version>11</java.version>
@@ -47,7 +53,6 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot-starter</artifactId>
-            <version>1.28.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -58,6 +63,11 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.7.16</version>
+        </dependency>
+        <dependency>
+            <groupId>com.celi</groupId>
+            <artifactId>cii-csa-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
