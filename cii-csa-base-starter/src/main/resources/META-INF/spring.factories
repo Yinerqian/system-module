@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.celi.cii.base.auto.BaseAutoConfigure,\
+  com.celi.cii.base.config.WebMvcConfig

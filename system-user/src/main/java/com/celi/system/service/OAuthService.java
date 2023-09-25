@@ -4,11 +4,11 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
+import com.celi.cii.common.exception.AuthenticationException;
 import com.celi.system.crypto.BCryptPasswordEncoder;
 import com.celi.system.entity.*;
 import com.celi.system.enums.ServiceCode;
 import com.celi.system.enums.UserStatusEnum;
-import com.celi.system.exception.AuthenticationException;
 import com.celi.system.utils.DateUtils;
 import org.springframework.stereotype.Service;
 
