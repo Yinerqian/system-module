@@ -11,6 +11,6 @@ public class ScConstant {
      * 0 启用
      * 1 停用
      */
-    public static final Integer SCHEDULE_STATUS_ENABLE = 0;
-    public static final Integer SCHEDULE_STATUS_DISABLE = 1;
+    public static final Integer SCHEDULE_STATUS_ENABLE = 1;
+    public static final Integer SCHEDULE_STATUS_DISABLE = 0;
 }
