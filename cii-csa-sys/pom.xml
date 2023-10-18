@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.celi</groupId>
-    <artifactId>system-user</artifactId>
+    <artifactId>cii-csa-sys</artifactId>
     <name>system-user</name>
     <version>${revision}</version>
     <description>用户模块</description>

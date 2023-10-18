@@ -48,16 +48,16 @@ public class CiiWebSocketConfigure implements WebSocketConfigurer {
         return new DefaultWebSocketHandler(ciiWsProperties());
     }
 
-    @ConditionalOnClass(value = SchedulingConfiguration.class)
-    @Bean
-    public TaskScheduler taskScheduler() {
-        // 设置核心线程数
-        int availableProcessors = Runtime.getRuntime().availableProcessors();
-        ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
-        taskScheduler.setPoolSize(availableProcessors);
-        taskScheduler.initialize();
-        return taskScheduler;
-    }
+    //@ConditionalOnClass(value = SchedulingConfiguration.class)
+    //@Bean
+    //public TaskScheduler taskScheduler() {
+    //    // 设置核心线程数
+    //    int availableProcessors = Runtime.getRuntime().availableProcessors();
+    //    ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
+    //    taskScheduler.setPoolSize(availableProcessors);
+    //    taskScheduler.initialize();
+    //    return taskScheduler;
+    //}
 
     @Bean
     @ConditionalOnMissingBean

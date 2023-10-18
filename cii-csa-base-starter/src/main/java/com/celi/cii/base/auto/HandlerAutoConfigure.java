@@ -1,5 +1,6 @@
 package com.celi.cii.base.auto;
 
+import com.celi.cii.base.exception.IServiceExceptionHandler;
 import com.celi.cii.base.exception.ServiceExceptionHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +19,8 @@ public class HandlerAutoConfigure {
      * @return
      */
     @Bean
-    @ConditionalOnMissingBean(value = ServiceExceptionHandler.class)
-    public ServiceExceptionHandler serviceExceptionHandler() {
+    @ConditionalOnMissingBean(value = IServiceExceptionHandler.class)
+    public IServiceExceptionHandler serviceExceptionHandler() {
         return new ServiceExceptionHandler();
     }
 }

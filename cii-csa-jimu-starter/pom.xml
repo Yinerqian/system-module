@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>com.celi</groupId>
-            <artifactId>system-user</artifactId>
+            <artifactId>cii-csa-sys</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

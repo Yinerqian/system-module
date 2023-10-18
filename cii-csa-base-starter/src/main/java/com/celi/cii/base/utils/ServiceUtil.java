@@ -2,7 +2,7 @@ package com.celi.cii.base.utils;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
-import com.celi.cii.base.entity.BaseCreateBy;
+import com.celi.cii.common.entity.BaseCreateBy;
 
 import java.util.Date;
 

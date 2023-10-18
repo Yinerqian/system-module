@@ -1,4 +1,4 @@
-package com.celi.cii.base.entity;
+package com.celi.cii.common.entity;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;

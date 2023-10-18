@@ -6,6 +6,7 @@ import com.celi.cii.base.config.WebMvcConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
@@ -15,6 +16,7 @@ import org.springframework.core.Ordered;
  */
 
 @Configuration
+@ComponentScan(basePackages = {"com.celi.cii.base", "com.celi.cii.common"})
 public class BaseAutoConfigure {
 
     /**
