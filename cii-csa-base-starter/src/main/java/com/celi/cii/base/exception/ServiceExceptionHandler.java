@@ -21,10 +21,9 @@ import java.util.Set;
 
 @ControllerAdvice
 @Slf4j
-public class ServiceExceptionHandler {
+public class ServiceExceptionHandler implements IServiceExceptionHandler {
 
-    @ExceptionHandler(value = {Exception.class})
-    protected ResponseEntity handleException(Exception e) {
+    public ResponseEntity handleException(Exception e) {
         log.error(e.getLocalizedMessage(), e);
 
         String className = e.getClass().getName();

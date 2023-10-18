@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @AutoConfigureAfter({ JimuReportConfiguration.class })
+@ComponentScan(basePackages = {"org.jeecg.modules.jmreport", "com.celi.cii.common"})
 public class CiiJimuAutoConfiguration {
 
     /**
