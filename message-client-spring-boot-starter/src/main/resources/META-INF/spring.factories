@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.celi.cii.message.client.starter.config.AutoMessageClientConfiguration
