@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.celi.system.dict.dao.SysDictGroupDao">
+
+    <insert id="insertSysDictGroup">
+        insert into cii_dict(dict_id, dict_name, dict_code, remark
+        , tenant_id, create_date, create_by, update_date, update_by, del_flag)
+        values(#{record.dictId}, #{record.dictName}, #{record.dictCode}, #{record.remark}
+        , #{record.tenantId}, #{record.createDate}, #{record.createBy}, #{record.updateDate}, #{record.updateBy}, #{record.delFlag})
+    </insert>
+
+    <update id="deleteSysDictGroup">
+        update cii_dict
+        set del_flag = 1,
+            update_by = #{record.updateBy},
+            update_date = #{record.updateDate}
+        where dict_id = #{record.dictId}
+    </update>
+
+    <update id="updateSysDictGroup">
+        update cii_dict
+        set update_by = #{record.updateBy},
+            update_date = #{record.updateDate},
+            dict_name = #{record.dictName},
+            dict_code = #{record.dictCode},
+            remark = #{record.remark}
+        where dict_id = #{record.dictId}
+    </update>
+
+    <select id="getDictGroupById" resultType="com.celi.system.dict.entity.SysDictGroup">
+        select *
+        from cii_dict
+        where dict_id = #{dictId}
+    </select>
+
+    <select id="listDictGroup" resultType="com.celi.system.dict.entity.SysDictGroup">
+        select *
+        from cii_dict
+        where del_flag = 0
+        and tenant_id = #{filter.tenantId}
+        <if test="filter.dictName != null and filter.dictName != ''">
+            and dict_name like '%${filter.dictName}%'
+        </if>
+        <if test="filter.dictCode != null and filter.dictCode != ''">
+            and dict_code like '%${filter.dictCode}%'
+        </if>
+        order by dict_code
+    </select>
+
+    <select id="validDictCode" resultType="java.lang.Integer">
+        select count(dict_id)
+        from cii_dict
+        where tenant_id = #{tenantId}
+        and del_flag = 0
+        <if test="dictId != null and dictId != ''">
+            and ( dict_code = #{dictCode} and dict_id != #{dictId} )
+        </if>
+        <if test="dictId == null or dictId == ''">
+            and dict_code = #{dictCode}
+        </if>
+    </select>
+
+    <select id="getDictGroupByCode" resultType="com.celi.system.dict.entity.SysDictGroup">
+        select *
+        from cii_dict
+        where del_flag=0
+        and dict_code=#{dictCode}
+    </select>
+
+</mapper>
