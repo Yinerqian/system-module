@@ -1,6 +1,7 @@
 package com.celi.cii.base.entity;
 
 import com.celi.cii.base.enums.LogLevelEnum;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -8,6 +9,8 @@ import lombok.Data;
  */
 @Data
 public class ApiDebugLog extends BaseCreateBy {
+
+    public static final String COLLECTION_NAME = "DO_API_CALL_LOG";
 
     /**
      * 接口 Id
@@ -23,6 +26,11 @@ public class ApiDebugLog extends BaseCreateBy {
      * 日志等级
      */
     private LogLevelEnum level;
+
+    @JsonProperty(value = "levelName")
+    public String getLevelName() {
+        return this.level == null ? "" : this.level.getTitle();
+    }
 
     /**
      * 日志内容

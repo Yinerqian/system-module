@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 public enum LogLevelEnum implements BaseEnum {
-    INFO("info", "信息"),
-    WARN("warn", "异常"),
-    ERROR("error", "错误"),
-    DEBUG("debug", "DEBUG"),
+    INFO("INFO", "信息"),
+    WARN("WARN", "异常"),
+    ERROR("ERROR", "错误"),
+    DEBUG("DEBUG", "DEBUG"),
     ;
 
     LogLevelEnum(String code, String title) {
