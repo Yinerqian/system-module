@@ -1,6 +1,10 @@
 package com.celi.auth.starter.config;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.celi.auth.starter.annotation.PermissionCheck;
 import com.celi.auth.starter.entity.PermissionEntity;
@@ -9,28 +13,18 @@ import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
-@ConditionalOnProperty(prefix = "cii.auth", value = "active", matchIfMissing = false)
-@Configuration
 @Slf4j
-public class AutoConfiguration implements ApplicationContextAware {
-
-
-    /**
-     * 是否激活: cii.auth.active 必须配置为 true 才会加载该容器, 不配或者为其它均不加载
-     */
-    @Value("${cii.auth.active}")
-    private boolean active;
+public class AutoRegisterPermission implements ApplicationContextAware {
 
     /**
      * 配置的权限url
@@ -47,17 +41,12 @@ public class AutoConfiguration implements ApplicationContextAware {
     @Value("${url.prefix}")
     private String prefix;
 
-    private String port = "9010";
+    private static final String PORT = "9010";
 
-    private String url = "/cii-sys/permission/insertSSOPermissionList";
-
-    private ApplicationContext applicationContext;
-
+    private static final String REGISTER_PATH = "/cii-sys/permission/insertSSOPermissionList";
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-
         // 1. 获取所有带Controller注解的bean(包含RestController注解) TestController, UserController
         Map<String, Object> controllerMap = applicationContext.getBeansWithAnnotation(Controller.class);
 
@@ -72,7 +61,7 @@ public class AutoConfiguration implements ApplicationContextAware {
             if (methods != null && methods.length > 0) {
                 String[] roles = null;                     // 获取方法上配置的角色信息 @PermissionCheck(role = {RolePermissionEnum.Constants.TENANT_ADMIN})
                 String[] permissions = null;               // 获取方法上配置的角色信息 @PermissionCheck(operate = {OperatePermissionEnum.Constants.OP_USER_ADD})
-                String[] methodMapping = null;    // 当配置了操作权限时, 获取请求url @RequestMapping({"/handle01"})
+                String methodMapping = null;    // 当配置了操作权限时, 获取请求url @RequestMapping({"/handle01"})
                 for (Method method : methods) {
                     // 4. 处理带有 PermissionCheck 注解的方法, 存在 PermissionCheck注解
                     PermissionCheck pkAnno = method.getAnnotation(PermissionCheck.class);
@@ -96,7 +85,7 @@ public class AutoConfiguration implements ApplicationContextAware {
                         // 6. 获取该类上的@RequestMapping
                         String clazzMapping = getClassMapping(method);
                         // 7. 拼接类请求路径 + 方法请求路径 /boot2/hello/handle01
-                        String requestURI = dealUri(clazzMapping, methodMapping[0]);
+                        String requestURI = dealUri(clazzMapping, methodMapping);
 
                         // 情况二: roles是空 和 operate 不为空
                         if (roleIsEmpty && !permissionIsEmpty) {
@@ -126,24 +115,28 @@ public class AutoConfiguration implements ApplicationContextAware {
                 }
             }
         }
-        if (permList != null && permList.size() > 0) {
-            final String concatUrl = this.permissionUrl.concat(":").concat(port).concat(url);
-         //   log.info("请求的url {}", concatUrl);
+        if (CollectionUtil.isNotEmpty(permList)) {
+            final String concatUrl = this.permissionUrl.concat(":").concat(PORT).concat(REGISTER_PATH);
+            //log.info("请求的url {}", concatUrl);
             String jsonStr = JSONUtil.toJsonStr(permList);
             log.info("发送数据: " + jsonStr);
-            String result = HttpRequest.post(concatUrl)
-                    .header("masterKey", masterKey)
-                    .body(jsonStr)
-                    .execute().body();
-            log.info("结果: " + result);
+            try (HttpResponse response = HttpRequest.post(concatUrl)
+                         .header("masterKey", masterKey)
+                         .body(jsonStr)
+                         .execute()) {
+                log.info("结果: " + response.body());
+            } catch (Exception e) {
+             //   e.printStackTrace();
+               log.error("注册失败");
+            }
         }
     }
 
     private boolean arrayIsEmpty(String[] array) {
-        if (array == null || array.length == 0 || StringUtils.isEmpty(array[0])) {
-            return true;
-        }
-        return false;
+        return ArrayUtil.isEmpty(array) || CollectionUtil.isEmpty(Arrays.stream(Arrays.stream(array)
+                .toArray()).filter(o -> {
+            return o != null && StrUtil.isNotBlank(o.toString());
+        }).collect(Collectors.toList()));
     }
 
     /**
@@ -239,29 +232,28 @@ public class AutoConfiguration implements ApplicationContextAware {
      * @param method
      * @return
      */
-    private String[] getRequestMappings(Method method) {
-        RequestMapping requestMapping = (RequestMapping) method.getAnnotation(RequestMapping.class);
+    private String getRequestMappings(Method method) {
+        RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
         if (requestMapping != null) {
-            return requestMapping.value();
+            return requestMapping.value()[0];
         }
-
         GetMapping getMapping = (GetMapping) method.getAnnotation(GetMapping.class);
         if (getMapping != null) {
-            return getMapping.value();
+            return getMapping.value()[0];
         }
 
         PostMapping postMapping = (PostMapping) method.getAnnotation(PostMapping.class);
         if (postMapping != null) {
-            return postMapping.value();
+            return postMapping.value()[0];
         }
 
         PutMapping putMapping = (PutMapping) method.getAnnotation(PutMapping.class);
         if (putMapping != null) {
-            return putMapping.value();
+            return putMapping.value()[0];
         }
         DeleteMapping deleteMapping = (DeleteMapping) method.getAnnotation(DeleteMapping.class);
         if (deleteMapping != null) {
-            return deleteMapping.value();
+            return deleteMapping.value()[0];
         }
         return null;
     }

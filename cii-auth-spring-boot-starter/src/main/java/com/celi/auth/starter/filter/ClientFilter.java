@@ -4,7 +4,6 @@ import com.celi.auth.starter.util.ClientUtils;
 import com.celi.auth.starter.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.RequestFacade;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -22,7 +21,6 @@ import java.io.IOException;
 @Component
 @Order(Integer.MIN_VALUE)
 @Slf4j
-@ComponentScan(basePackages = {"com.celi.starter"})
 public class ClientFilter implements Filter {
 
     @Override
