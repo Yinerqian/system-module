@@ -15,7 +15,7 @@
         <dependency>
             <groupId>com.celi</groupId>
             <artifactId>system-message</artifactId>
-            <version>${revision}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
