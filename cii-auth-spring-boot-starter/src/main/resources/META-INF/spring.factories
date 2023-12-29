@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.celi.auth.starter.config.AutoConfiguration,\
+  com.celi.auth.starter.config.CiiAuthProperties
