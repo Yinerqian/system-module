@@ -233,27 +233,11 @@ public class AutoRegisterPermission implements ApplicationContextAware {
      * @return
      */
     private String getRequestMappings(Method method) {
-        RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
-        if (requestMapping != null) {
-            return requestMapping.value()[0];
-        }
-        GetMapping getMapping = (GetMapping) method.getAnnotation(GetMapping.class);
-        if (getMapping != null) {
-            return getMapping.value()[0];
-        }
-
-        PostMapping postMapping = (PostMapping) method.getAnnotation(PostMapping.class);
-        if (postMapping != null) {
-            return postMapping.value()[0];
-        }
-
-        PutMapping putMapping = (PutMapping) method.getAnnotation(PutMapping.class);
-        if (putMapping != null) {
-            return putMapping.value()[0];
-        }
-        DeleteMapping deleteMapping = (DeleteMapping) method.getAnnotation(DeleteMapping.class);
-        if (deleteMapping != null) {
-            return deleteMapping.value()[0];
+        Optional<RequestMapping> optional = Arrays.stream(method.getAnnotations()).filter(annotation -> {
+            return annotation instanceof RequestMapping;
+        }).map(annotation -> (RequestMapping) annotation).findFirst();
+        if (optional.isPresent()) {
+            return optional.get().value()[0];
         }
         return null;
     }
