@@ -75,7 +75,7 @@
         <module>cii-csa-common</module>
         <module>cii-csa-ws</module>
         <module>cii-csa-schedule</module>
-        <module>system-message</module>
+        <module>cii-auth-spring-boot-starter</module>
     </modules>
 
     <packaging>pom</packaging>

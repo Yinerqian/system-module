@@ -6,6 +6,9 @@ public class OpenDataConstant {
     public static final String OPEN_DATA_UPSERT = "upsert";
     public static final String OPEN_DATA_DELETE = "delete";
 
+    public static final String OPEN_DATA_LOGICAL_DELETE = "logical_delete";
+    public static final String OPEN_DATA_BATCH_LOGICAL_DELETE = "batch_logical_delete";
+
     public static final String PAGE_NUM = "pageNum";
     public static final String PAGE_SIZE = "pageSize";
 
