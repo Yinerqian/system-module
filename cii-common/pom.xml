@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cii-common</artifactId>
-    <version>2.1.4</version>
     <description>策立之芯平台公共模块</description>
 
     <dependencies>

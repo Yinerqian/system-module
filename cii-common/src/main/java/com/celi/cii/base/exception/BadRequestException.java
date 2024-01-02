@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author jiangshengjun
  * @date 2022/3/7
+ * @Description 请求错误  参数错误等
  */
 @Data
 @NoArgsConstructor

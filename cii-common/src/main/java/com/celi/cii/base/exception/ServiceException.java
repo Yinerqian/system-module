@@ -2,6 +2,10 @@ package com.celi.cii.base.exception;
 
 import lombok.Data;
 
+/**
+ * @Author jiangshengjun
+ * @Description 服务异常
+ */
 @Data
 public class ServiceException extends RuntimeException {
 
