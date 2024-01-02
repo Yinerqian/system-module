@@ -7,6 +7,11 @@ import java.util.List;
 
 @Data
 public class DataDeleteVO {
+    /**
+     * 数据源标识
+     */
+    private String key;
+
     private String dataSourceName;
 
     private String schemaName;
