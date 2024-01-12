@@ -2,15 +2,22 @@ package com.celi.system.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONUtil;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.celi.cii.common.exception.AuthenticationException;
+import com.celi.system.constant.SystemConstants;
 import com.celi.system.crypto.BCryptPasswordEncoder;
+import com.celi.system.dao.UserRepository;
+import com.celi.system.dto.PermissionGroupDTO;
 import com.celi.system.entity.*;
+import com.celi.system.enums.PermissionTypeEnum;
 import com.celi.system.enums.ServiceCode;
 import com.celi.system.enums.UserStatusEnum;
 import com.celi.system.utils.DateUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -24,16 +31,20 @@ import java.util.stream.Collectors;
 public class OAuthService {
 
     @Resource
-    private UserService userService;
+    private UserRepository userRepository;
     @Resource
     private UserRoleService userRoleService;
     @Resource
-    private AppPermissionRoleService appPermissionRoleService;
-    @Resource
     private PermissionService permissionService;
+    @Resource
+    private PermissionGroupService permissionGroupService;
+    @Resource
+    private RolePermissionService rolePermissionService;
+    @Resource
+    private RoleService roleService;
 
     public void userLogin(UserLoginEntity userLoginEntity) {
-        User userInfo = userService.findUserByLoginName(userLoginEntity.getUserName());
+        User userInfo = userRepository.findUserByLoginName(userLoginEntity.getUserName());
         if (null == userInfo) {
             throw new AuthenticationException(ServiceCode.UNKNOWN_USER.getMessage());
         }
@@ -41,89 +52,158 @@ public class OAuthService {
         if (userInfo.getDisabled() == UserStatusEnum.DISABLED) {
             throw new AuthenticationException("用户已被禁用，请联系管理员");
         }
+
+        if (ObjectUtil.isNotNull(userInfo.getExpired())) {
+            if (DateUtil.date().isAfter(userInfo.getExpired())) {
+                throw new AuthenticationException("用户已过期，请联系管理员");
+            }
+        }
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         boolean isPasswordCorrect = encoder.matches(userLoginEntity.getPassword(), userInfo.getPassword());
         if (!isPasswordCorrect) {
             throw new AuthenticationException(ServiceCode.CHECK_INPUT_PASSWORD.getMessage());
         }
         userInfo.setLastLoginDate(DateUtils.now());
-        userService.save(userInfo);
+        userRepository.save(userInfo);
         StpUtil.login(userInfo.getUserId());
     }
 
-    public User queryUserInfo(Integer userId) {
-        User userInfo = userService.findByUserId(userId);
-        JSONArray permissionJSONArray = JSONUtil.parseArray(listPermissionsByUserId(userId));
-        Set permissions = permissionJSONArray.stream().collect(Collectors.toSet());
-        userInfo.setPermissionCode(permissions);
+    public User queryUserInfo(String userId) {
+        User userInfo = userRepository.findByUserId(userId);
+        userInfo.setRoleList(roleService.findAllByRoleIdIn(userId));
+
+        List<String> userRoleIds = userInfo.getRoleList().stream().map(Role::getRoleId).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(userRoleIds)) {
+            // 根据角色ID查询所有的权限
+            List<RolePermission> userRolePermissions = rolePermissionService.queryByRoleIds(userRoleIds);
+            List<String> permissionIds = userRolePermissions.stream().map(RolePermission::getPermissionId).collect(Collectors.toList());
+            List<Permission> permissionList = permissionService.queryPermissionsByIds(permissionIds);
+            Set<String> permissionCodeSet = permissionList.stream().filter(permission -> {
+                return permission.getPermissionType().ordinal() == PermissionTypeEnum.OP.ordinal();
+            }).map(Permission::getPermissionCode).collect(Collectors.toSet());
+            userInfo.setPermissionCode(permissionCodeSet);
+        }
         return userInfo;
+
     }
 
-    public String listPermissionsByUserId(Integer userId) {
-        // 首先判断是否是平台管理员
-        User user = userService.findByUserId(userId);
-        if (user == null) {
-            return "";
-        }
+    /**
+     * @return 扁平权限树
+     */
+    public List<PermissionGroup> userPermissionFlatByGroup() {
+        // 根据角色ID查询所有的权限
+        List<RolePermission> rolePermissions = getRolePermissions();
+        // 查询权限列表
+        List<Permission> userPermissions = permissionService.queryPermissionsByIds(
+                rolePermissions.stream()
+                        .map(RolePermission::getPermissionId)
+                        .collect(Collectors.toList()))
+                .stream()
+                .sorted(Comparator.comparingInt(Permission::getSort))
+                .collect(Collectors.toList());
+        Map<String, List<Permission>> userPermissionMap = new HashMap<>();
 
-        if (user.getIsPlatformAdmin()) {
-            List<String> permissions = userService.getPermissionsByUsernameAndAppCode(user.getLoginName(), null);
-            return JSONUtil.toJsonStr(permissions);
-        } else {
-            // 1. 根据用户id查询角色id集合
-            List<Integer> roleIds = userRoleService.findRoleIds(userId).stream().map(UserRole::getRoleId).collect(Collectors.toList());
+        List<PermissionGroup> permissionGroups = new ArrayList<>();
 
-            // 2. 根据角色集合查询权限集合(去重)
-            List<Integer> permissionList = appPermissionRoleService.listPermissionsByRoleIds(roleIds);
-            if (permissionList == null || permissionList.size() == 0) {
-                return null;
+        userPermissions.forEach(userPermission -> {
+            String groupName = userPermission.getGroupName();
+            Optional<PermissionGroup> first = permissionGroups.stream()
+                    .filter(group -> group.getGroupName().equals(groupName))
+                    .findFirst();
+            if (first.isPresent()) {
+                PermissionGroup targetGroup = first.get();
+                int i = permissionGroups.indexOf(targetGroup);
+                targetGroup.getPermissionList().add(userPermission);
+                permissionGroups.set(i, targetGroup);
+            } else {
+                PermissionGroup permissionGroup = new PermissionGroup();
+                permissionGroup.setGroupName(groupName);
+                List<Permission> permissions = new ArrayList<>();
+                permissions.add(userPermission);
+                permissionGroup.setPermissionList(permissions);
+                permissionGroups.add(permissionGroup);
             }
-
-            List<String> PermCodeList = permissionService.listPermissionsByPermissionList(permissionList);
-            return JSONUtil.toJsonStr(PermCodeList);
-        }
-    }
-
-    public List<PermissionGroup> listAppMenusByUserId(Integer tenantId, Integer userId, String appCode) {
-        // 1. 查询 appId
-//        App app = AppService.getAppByCode(appCode);
-//        if (app == null) {
-//            throw new ServiceException("未找到该应用, 应用编码:"+appCode);
-//        }
-//        return listPermissionsByAppId(tenantId, app.getAppId());
-
-        // 首先判断是否是平台管理员
-        User user = userService.findByUserId(userId);
-        if (user == null) {
-            return new ArrayList<>();
-        }
-
-        List<PermissionGroup> groups = new ArrayList<>();
-        List<Permission> permissions;
-
-        if (user.getIsPlatformAdmin()) {
-            // 如果是平台管理员，则获取所有菜单权限
-            permissions = permissionService.listAllAppMenus(appCode);
-        } else {
-            permissions = permissionService.listAppMenusByUserId(tenantId, userId, appCode);
-        }
-
-        Map<Integer, List<Permission>> collect = permissions.stream().collect(Collectors.groupingBy(Permission::getGroupId));
-        collect.forEach((k, v) -> {
-            PermissionGroup group = new PermissionGroup();
-            group.setGroupId(k);
-            if (CollectionUtil.isNotEmpty(v)) {
-                group.setGroupName(v.get(0).getGroupName());
-                group.setCreateDate(v.get(0).getCreateDate());
-                group.setGroupIcon(v.get(0).getGroupIcon());
-                group.setGroupSort(v.get(0).getGroupSort());
-            }
-            group.setPermissionList(v);
-            groups.add(group);
         });
-
-        return groups.stream().sorted(Comparator.comparing(PermissionGroup::getGroupSort)).collect(Collectors.toList());
+        return permissionGroups;
     }
 
+    private List<RolePermission> getRolePermissions() {
+        String userId = StpUtil.getLoginIdAsString();
+        List<UserRole> userRoles = userRoleService.findRoleIds(userId);
+        if (CollectionUtils.isEmpty(userRoles)) {
+            throw new AuthenticationException("用户未配置权限，请联系管理员");
+        }
+        // 该用户所有的角色ID
+        List<String> userRoleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
+        // 根据角色ID查询所有的权限
+        List<RolePermission> rolePermissions = rolePermissionService.queryByRoleIds(userRoleIds);
+        if (CollectionUtils.isEmpty(rolePermissions)) {
+            throw new AuthenticationException("用户未配置权限，请联系管理员");
+        }
+        return rolePermissions;
+    }
+
+    public List<PermissionGroupDTO> userPermissionByGroup() {
+        // 根据角色ID查询所有的权限
+        List<RolePermission> rolePermissions = getRolePermissions();
+        // 查询权限分组
+        List<PermissionGroup> allPermissionGroups = permissionGroupService.findAll();
+        // 查询权限列表
+        List<Permission> userPermissions = permissionService.queryPermissionsByIds(rolePermissions.stream()
+                .map(RolePermission::getPermissionId).collect(Collectors.toList()));
+
+        // 排序
+        allPermissionGroups = allPermissionGroups.stream().sorted(Comparator.comparingInt(PermissionGroup::getSort)).collect(Collectors.toList());
+        userPermissions = userPermissions.stream().sorted(Comparator.comparingInt(Permission::getSort)).collect(Collectors.toList());
+
+        // 2023-3-13 由按分组NAME修改为按分组ID匹配
+        Map<String, List<Permission>> userPermissionMap = userPermissions.stream()
+                .filter(permission -> {
+                    return permission.getPermissionType().ordinal() == PermissionTypeEnum.MENU.ordinal();
+                }).collect(Collectors.groupingBy(Permission::getGroupId));
+        // 返回树状数组
+        return generateGroupTree(allPermissionGroups, userPermissionMap);
+    }
+
+    /**
+     * 生成权限树(利用指针指向内存空间的原理)
+     *
+     * @param allPermissionGroups 所有权限分组 List
+     * @param userPermissionMap   用户具体权限
+     * @return 权限树
+     */
+    private List<PermissionGroupDTO> generateGroupTree(List<PermissionGroup> allPermissionGroups, Map<String, List<Permission>> userPermissionMap) {
+        // 生成 map 存储元素
+        Map<String, PermissionGroupDTO> map = new HashMap<>();
+        // 设置顶层节点
+        PermissionGroupDTO parentNode = new PermissionGroupDTO();
+        parentNode.setGroupId(SystemConstants.NO_PARENT_PERMISSION_GROUP);
+        map.put(SystemConstants.NO_PARENT_PERMISSION_GROUP, parentNode);
+
+        // 初始化 Map
+        allPermissionGroups.forEach(permissionGroup -> map.put(permissionGroup.getGroupId(), convertPermissionGroup2DTO(permissionGroup)));
+
+        // 通过 Map 生成树结构
+        allPermissionGroups.forEach(permissionGroup -> {
+            // 设置具体权限菜单
+            List<Permission> permissions = userPermissionMap.get(permissionGroup.getGroupId());
+            if (CollectionUtil.isNotEmpty(permissions)) {
+                map.get(permissionGroup.getGroupId()).setPermissionList(permissions);
+            }
+
+            // 查找父元素，存在则将该元素插入到 children
+            if (map.containsKey(permissionGroup.getParentGroupId())) {
+                map.get(permissionGroup.getParentGroupId()).getChildren().add(map.get(permissionGroup.getGroupId()));
+            }
+        });
+        return map.get(SystemConstants.NO_PARENT_PERMISSION_GROUP).getChildren();
+    }
+
+    private PermissionGroupDTO convertPermissionGroup2DTO(PermissionGroup permissionGroup) {
+        PermissionGroupDTO permissionGroupDTO = new PermissionGroupDTO();
+        BeanUtils.copyProperties(permissionGroup, permissionGroupDTO);
+        return permissionGroupDTO;
+    }
 
 }

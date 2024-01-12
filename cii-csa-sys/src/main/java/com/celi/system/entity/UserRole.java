@@ -24,23 +24,13 @@ public class UserRole {
 
     @Id
     @Column(name = "USER_ID", nullable = false)
-    private Integer userId;
+    private String userId;
 
     /**
      * 角色id
      */
     @Id
     @Column(name = "ROLE_ID", nullable = false)
-    private Integer roleId;
+    private String roleId;
 
-    /**
-     *  租户id
-     */
-    @Column(name = "TENANT_ID")
-    private Integer tenantId;
-
-    public UserRole(Integer userId, Integer roleId) {
-        this.userId = userId;
-        this.roleId = roleId;
-    }
 }

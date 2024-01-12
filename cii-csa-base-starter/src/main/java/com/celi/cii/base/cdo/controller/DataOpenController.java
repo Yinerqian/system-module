@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.Map;
 
-@RestController
 @Slf4j
 public class DataOpenController {
 

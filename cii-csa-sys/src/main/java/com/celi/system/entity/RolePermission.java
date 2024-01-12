@@ -28,10 +28,10 @@ public class RolePermission {
      */
     @Id
     @Column(name = "ROLE_ID", nullable = false)
-    private Integer roleId;
+    private String roleId;
 
     @Id
     @Column(name = "PERMISSION_ID", nullable = false)
-    private Integer permissionId;
+    private String permissionId;
 
 }

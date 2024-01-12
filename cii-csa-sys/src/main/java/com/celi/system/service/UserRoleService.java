@@ -18,21 +18,37 @@ public class UserRoleService {
     }
 
     /**
+     * 保存角色信息
+     * @param scmpUserRoleList
+     */
+    public void saveAllUserRole(List<UserRole> scmpUserRoleList) {
+        userRoleRepository.saveAll(scmpUserRoleList);
+    }
+
+
+    /**
+     * 删除信息
+     * @param roleId 用户id
+     */
+    public void deleteByRoleId(String roleId) {
+        userRoleRepository.deleteByRoleId(roleId);
+    }
+
+    /**
+     * 删除信息
+     * @param userId 用户id
+     */
+    public void deleteByUserId(String userId) {
+        userRoleRepository.deleteByUserId(userId);
+    }
+
+    /**
      * 根据用户id 查询该用户下 所有的角色id
-     *
      * @param userId
      * @return
      */
-    public List<UserRole> findRoleIds(Integer userId) {
+    public List<UserRole> findRoleIds(String userId){
         return userRoleRepository.findAllByUserId(userId);
     }
 
-
-    public List<String> listAllPermissionsByAppCode(String appCode) {
-        return userRoleRepository.listAllPermissionsByAppCode(appCode);
-    }
-
-    public List<String> getPermissionsByUsernameAndAppCode(String name, String appCode) {
-        return userRoleRepository.getPermissionsByUsernameAndAppCode(name, appCode);
-    }
 }

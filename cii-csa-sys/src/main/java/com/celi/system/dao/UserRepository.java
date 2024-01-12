@@ -1,8 +1,12 @@
 package com.celi.system.dao;
 
 import com.celi.system.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Author: Changaowen
@@ -14,6 +18,14 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     User findUserByLoginName(String loginName);
 
-    User findByUserId(Integer userId);
+    User findByUserId(String userId);
+
+    Page<User> findAllByLoginNameContainingOrNickNameContaining(String loginName, String nickName, Pageable pageable);
+
+    Page<User> findAll(Pageable pageable);
+
+    void deleteByUserId(String userId);
+
+    List<User> findAllByUserIdIn(List<String> userIds);
 
 }

@@ -31,13 +31,7 @@ public class User extends BaseCreateBy {
      */
     @Id
     @Column(name = "USER_ID", updatable = false)
-    private Integer userId;
-
-    /**
-     *  租户id
-     */
-    @Column(name = "CURRENT_TENANT_ID")
-    private Integer currentTenantId;
+    private String userId;
 
     /**
      *  用户类型，0-管理员 1-普通用户 2-开发者
@@ -63,12 +57,6 @@ public class User extends BaseCreateBy {
     @Column(name = "PASSWORD")
     private String password;
 
-    /**
-     * MasterKey
-     */
-    @Column(name = "MASTER_KEY")
-    private String masterKey;
-
     // 修改密码 旧密码
     @Transient
     private String oldPassword;
@@ -78,10 +66,11 @@ public class User extends BaseCreateBy {
     private String newPassword;
 
     /**
-     * 是否过期，1-过期 0-不过期
+     * 到期时间
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name = "EXPIRED")
-    private Integer expired;
+    private Date expired;
 
     /**
      * 是否禁用 1-禁用，0-启用

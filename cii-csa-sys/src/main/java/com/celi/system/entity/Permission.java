@@ -1,5 +1,6 @@
 package com.celi.system.entity;
 
+import com.celi.system.enums.PermissionTypeEnum;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
@@ -16,20 +17,14 @@ public class Permission extends BaseCreateBy {
     // 权限id
     @Id
     @Column(name = "PERMISSION_ID", updatable = false)
-    private Integer permissionId;
+    private String permissionId;
 
     // 权限分组id
     @Column(name = "GROUP_ID")
-    private Integer groupId;
+    private String groupId;
 
-    @Transient
+    @Column(name = "GROUP_NAME")
     private String groupName;
-
-    @Transient
-    private String groupIcon;
-
-    @Transient
-    private Integer groupSort;
 
     // 权限code，英文描述，全局唯一
     @Column(name = "PERMISSION_CODE")
@@ -45,7 +40,7 @@ public class Permission extends BaseCreateBy {
 
     // 权限类型 menu-菜单 op-操作
     @Column(name = "PERMISSION_TYPE")
-    private String permissionType;
+    private PermissionTypeEnum permissionType;
 
     // 是否只有平台管理员具备的权限，如果是1，则普通用户无法查看该权限，默认0
     @Column(name = "PLATFORM_ADMIN_FLAG")
