@@ -24,7 +24,7 @@ public class BaseAutoConfigure {
      * @return
      */
     @Bean
-    @ConditionalOnProperty(prefix = "cii", name = "open-api.prefix", matchIfMissing = false)
+    @ConditionalOnProperty(prefix = "cii", name = "enableDo", havingValue = "true", matchIfMissing = false)
     public DataOpenController dataOpenController() {
         return new DataOpenController();
     }
