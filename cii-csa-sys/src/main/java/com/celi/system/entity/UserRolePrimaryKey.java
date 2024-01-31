@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 public class UserRolePrimaryKey implements Serializable {
 
-    public Integer userId;
+    public String userId;
 
-    public Integer roleId;
+    public String roleId;
 }

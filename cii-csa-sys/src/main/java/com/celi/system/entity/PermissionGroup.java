@@ -17,7 +17,7 @@ public class PermissionGroup extends BaseCreateBy {
     // 分组id
     @Id
     @Column(name = "GROUP_ID", updatable = false)
-    private Integer groupId;
+    private String groupId;
 
 
     // 分组名称
@@ -31,13 +31,6 @@ public class PermissionGroup extends BaseCreateBy {
     // 排序
     @Column(name = "SORT")
     private Integer sort;
-
-    @Column(name = "GROUP_ICON")
-    private String groupIcon;
-
-    //分组排序
-    @Column(name = "GROUP_SORT")
-    private Integer groupSort;
 
     @Transient
     private List<Permission> permissionList;

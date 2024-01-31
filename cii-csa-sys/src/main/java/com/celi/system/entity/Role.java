@@ -19,7 +19,7 @@ public class Role extends BaseCreateBy{
      */
     @Id
     @Column(name = "ROLE_ID", updatable = false)
-    private Integer roleId;
+    private String roleId;
 
     /**
      * 角色名称

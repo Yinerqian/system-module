@@ -9,12 +9,14 @@ import cn.hutool.json.JSONUtil;
 import com.celi.auth.starter.annotation.PermissionCheck;
 import com.celi.auth.starter.entity.PermissionEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.framework.AopProxyUtils;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -47,17 +49,47 @@ public class AutoRegisterPermission implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        // 1. 获取所有带Controller注解的bean(包含RestController注解) TestController, UserController
-        Map<String, Object> controllerMap = applicationContext.getBeansWithAnnotation(Controller.class);
+
+        /**
+         * 由之前从applicationContext中获取带有Controller相关容器改由(此会导致获取的部分bean包含cglib代理的bean, 不是实际需要的bean)
+         * 从包中扫描带有Controller和RestController注解的Bean
+         */
+        // 1. 扫描基础包, 获取基础包名
+        String packageName = null;
+        final Map<String, Object> packageMap = applicationContext.getBeansWithAnnotation(SpringBootApplication.class);
+        for (String bean : packageMap.keySet()) {
+            Object obj = applicationContext.getBean(bean);
+            Class<?> beanClass = obj.getClass();
+            packageName = beanClass.getPackageName();
+        }
+        log.info("1. 获取基础包名 packageName: {}", packageName);
+
+        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+        provider.addIncludeFilter(new AnnotationTypeFilter(Controller.class));
+        provider.addIncludeFilter(new AnnotationTypeFilter(RestController.class));
+        Set<BeanDefinition> annotatedBeanDefinitions = provider.findCandidateComponents(packageName);
+
+
+        // 用于保存带有Controller和RestController注解的集合
+        List<String> controllerList = new ArrayList<>();
+        for (BeanDefinition beanDefinition : annotatedBeanDefinitions) {
+            String beanClassName = beanDefinition.getBeanClassName();
+            controllerList.add(beanClassName);
+        }
+        log.info("2. 获取到所有的Controller和RestController注解的class: {}", controllerList);
 
         // 用户存放发送权限数据的集合
         List<PermissionEntity> permList = new ArrayList<>();
-        for (String bean : controllerMap.keySet()) {
-            // 2. 根据bean获取全类名
-            Object object = applicationContext.getBean(bean);
-
+        for (String bean : controllerList) {
+            Class<?> clazz = null;
+            try {
+                clazz = Class.forName(bean);
+            } catch (ClassNotFoundException e) {
+                log.error("2. Class.forName失败: {}", e.getMessage());
+                continue;
+            }
             // 3. 获取Controller内的方法 TestController内的getDemo()方法, UserController内的getDemo2()方法
-            Method[] methods = object.getClass().getMethods();
+            Method[] methods = clazz.getDeclaredMethods();
             if (methods != null && methods.length > 0) {
                 String[] roles = null;                     // 获取方法上配置的角色信息 @PermissionCheck(role = {RolePermissionEnum.Constants.TENANT_ADMIN})
                 String[] permissions = null;               // 获取方法上配置的角色信息 @PermissionCheck(operate = {OperatePermissionEnum.Constants.OP_USER_ADD})
@@ -79,13 +111,35 @@ public class AutoRegisterPermission implements ApplicationContextAware {
                             continue;
                         }
 
+                        log.info("4. 方法名: {}", method.getName());
 
                         // 5. 获取带有 @PermissionCheck注解的方法 @RequestMapping上的url @RequestMapping({"/handle01"})
                         methodMapping = getRequestMappings(method);
-                        // 6. 获取该类上的@RequestMapping
-                        String clazzMapping = getClassMapping(method);
-                        // 7. 拼接类请求路径 + 方法请求路径 /boot2/hello/handle01
-                        String requestURI = dealUri(clazzMapping, methodMapping);
+                        log.info("5. 获取带有 @PermissionCheck注解的方法 @RequestMapping上的url: {}", methodMapping);
+
+                        String requestURI = "";
+                        if (StringUtils.isEmpty(methodMapping)) {
+                            log.info("5.1. 未从自己类获取到mapping, 尝试从父接口获取: {}", methodMapping);
+                            methodMapping = getFromInterface(clazz, method);
+                            log.info("5.2. 从父接口获取到mapping, 尝试从父接口获取: {}", methodMapping);
+                            requestURI = methodMapping;
+                        } else {
+                            // 6. 获取该类上的@RequestMapping
+                            String clazzMapping = getClassMapping(method);
+                            log.info("6. 获取该类上的@RequestMapping: {}", methodMapping);
+
+                            // 7. 拼接类请求路径 + 方法请求路径 /boot2/hello/handle01
+                            requestURI = dealUri(clazzMapping, methodMapping);
+                            log.info("7. 拼接类请求路径 + 方法请求路径: {}", requestURI);
+                        }
+
+                        // 处理 /cii-sys/user/resetPassword/{userId} 情况
+                        requestURI = dealPathVariableUrl(requestURI);
+
+                        if (StringUtils.isEmpty(methodMapping)) {
+                            log.error("8. 从自己和父接口均未获取到mapping, 继续: {}", method.getName());
+                            continue;
+                        }
 
                         // 情况二: roles是空 和 operate 不为空
                         if (roleIsEmpty && !permissionIsEmpty) {
@@ -129,6 +183,27 @@ public class AutoRegisterPermission implements ApplicationContextAware {
              //   e.printStackTrace();
                log.error("注册失败");
             }
+        }
+    }
+
+    private String getFromInterface(Class clazz, Method method) {
+        final Class parentInterface = clazz.getInterfaces()[0];
+        if (parentInterface == null) {
+            log.error("10-error. 未获取到父类接口: {}", clazz);
+            return null;
+        }
+        log.info("10. 从父接口getFromInterface 获取到的class: {}", parentInterface);
+        try {
+            Method parentMethod = parentInterface.getMethod(method.getName(), method.getParameterTypes());
+            if (parentMethod == null) {
+                log.error("11-error. 未获取到父类接口的mapping: {}", clazz);
+                return null;
+            }
+            log.info("11. 从父接口getFromInterface 获取到的class: {}", parentMethod);
+            String parentMapping = getRequestMappings(parentMethod);
+            return parentMapping;
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -207,61 +282,56 @@ public class AutoRegisterPermission implements ApplicationContextAware {
         return value;
     }
 
-    private String getClassRequestMapping(Method method) {
-        Class clazz = method.getDeclaringClass();
-        log.info("2. 获取目标类名: {}", clazz);
-
-        RequestMapping requestMapping = (RequestMapping)clazz.getAnnotation(RequestMapping.class);
-        // [${url.prefix}/hello]
-        if (requestMapping == null) {
-            return null;
-        }
-        String value = requestMapping.value()[0];
-        return deal$(value);
-    }
-
-    private String deal$(String value) {
-        if (value.contains("${")) {
-            return prefix + value.substring(value.indexOf("}") + 1, value.length());
-        }
-        return value;
-    }
-
     /**
      * 支持常用的Mapping
      * @param method
      * @return
      */
     private String getRequestMappings(Method method) {
-        Optional<RequestMapping> optional = Arrays.stream(method.getAnnotations()).filter(annotation -> {
-            return annotation instanceof RequestMapping;
-        }).map(annotation -> (RequestMapping) annotation).findFirst();
-        if (optional.isPresent()) {
-            return optional.get().value()[0];
+        RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
+        if (requestMapping != null) {
+            return requestMapping.value()[0];
+        }
+        GetMapping getMapping = method.getAnnotation(GetMapping.class);
+        if (getMapping != null) {
+            return getMapping.value()[0];
+        }
+
+        PostMapping postMapping = method.getAnnotation(PostMapping.class);
+        if (postMapping != null) {
+            return postMapping.value()[0];
+        }
+
+        PutMapping putMapping = method.getAnnotation(PutMapping.class);
+        if (putMapping != null) {
+            return putMapping.value()[0];
+        }
+        DeleteMapping deleteMapping = method.getAnnotation(DeleteMapping.class);
+        if (deleteMapping != null) {
+            return deleteMapping.value()[0];
         }
         return null;
     }
 
     /**
-     * 判断是何种类型代理
-     * @param bean
+     * 处理带有请求路径中包含{}的url
+     * /cii-sys/user/resetPassword/{userId} -> /cii-sys/user/resetPassword
+     * @param url
      * @return
      */
-    private Method[] dealDeclaredMethods(Object bean) {
-        Method[] declaredMethods = null;
-        if (AopUtils.isJdkDynamicProxy(bean)) {
-            Object singletonTarget = AopProxyUtils.getSingletonTarget(bean);
-            if (singletonTarget != null) {
-                declaredMethods = singletonTarget.getClass().getDeclaredMethods();
-            }
-        } else if (AopUtils.isCglibProxy(bean)) {
-            declaredMethods = bean.getClass().getSuperclass().getDeclaredMethods();
-        } else {
-         //   declaredMethods = bean.getClass().getDeclaredMethods();
-            declaredMethods = bean.getClass().getMethods();
+    public static String dealPathVariableUrl(String url) {
+        if (StringUtils.isEmpty(url)) {
+            return null;
         }
-        return declaredMethods;
-    }
+        if (url.contains("{") && url.contains("}") ) {
+            int beginIndex = url.indexOf("{") - 1;  // 找到{前一个字符
+            int endIndex = url.indexOf("}") + 1;    // 找到{后一个字符
 
+            String oldStr = url.substring(beginIndex, endIndex); // "/{userId}"
+            url = url.replace(oldStr, "");
+            return url;
+        }
+        return url;
+    }
 
 }

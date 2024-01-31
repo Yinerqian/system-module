@@ -18,27 +18,27 @@ public class BaseCreateBy {
     public static final Integer UN_DELETED = 0;
 
 
-    @Column(name = "CREATE_BY", columnDefinition = "varchar(32)")
-    protected Integer createBy;
+    @Column(name = "CREATED_BY", columnDefinition = "varchar(32)")
+    protected String createdBy;
 
-    @Column(name = "CREATE_DATE")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createDate;
-
-    @Column(name = "UPDATE_BY", columnDefinition = "varchar(32)")
-    protected Integer updateBy;
-
+    @Column(name = "CREATED_BY_NAME", columnDefinition = "varchar(200)")
     @Transient
-    @Column(name = "UPDATE_NAME")
-    private String updateName;
+    protected String createdByName;
 
-    @Transient
-    @Column(name = "CREATE_NAME")
-    private String createName;
-
-    @Column(name = "UPDATE_DATE")
+    @Column(name = "CREATED_TIME")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date updateDate;
+    private Date createdTime;
+
+    @Column(name = "UPDATED_BY", columnDefinition = "varchar(32)")
+    protected String updatedBy;
+
+    @Column(name = "UPDATED_BY_NAME", columnDefinition = "varchar(200)")
+    @Transient
+    protected String updatedByName;
+
+    @Column(name = "UPDATED_TIME")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updatedTime;
 
     @Column(name = "KEYWORD")
     @Transient

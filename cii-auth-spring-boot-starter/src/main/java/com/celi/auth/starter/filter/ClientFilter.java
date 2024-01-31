@@ -32,8 +32,6 @@ public class ClientFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         String userIdEncode = ((RequestFacade) request).getHeader("USER_ID");
         String tenantIdEncode = ((RequestFacade) request).getHeader("TENANT_ID");
-        log.info("ClientFilter: userId加密: {}", userIdEncode);
-        log.info("ClientFilter: tenantId加密: {}", tenantIdEncode);
 
         String userId = null;
         if (!StringUtils.isEmpty(userIdEncode)) {
@@ -44,8 +42,6 @@ public class ClientFilter implements Filter {
         if (!StringUtils.isEmpty(userIdEncode)) {
             tenantId = SecurityUtil.decode(tenantIdEncode);
         }
-        log.info("ClientFilter: userId {}", userId);
-        log.info("ClientFilter: tenantId {}", tenantId);
         if (userId != null) {
             ClientUtils.setCurrentUserId(userId);
         }

@@ -61,7 +61,7 @@
         <junit.version>4.13</junit.version>
         <junit-jupiter.version>5.6.2</junit-jupiter.version>
         <hutool.version>5.7.3</hutool.version>
-        <revision>2.1.0</revision>
+        <revision>2.1.5</revision>
     </properties>
 
     <modules>
@@ -75,9 +75,6 @@
         <module>cii-csa-common</module>
         <module>cii-csa-ws</module>
         <module>cii-csa-schedule</module>
-        <module>system-message</module>
-        <module>cii-message-sdk</module>
-        <module>message-client-spring-boot-starter</module>
         <module>cii-auth-spring-boot-starter</module>
     </modules>
 
