@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 告警规则
@@ -70,5 +71,15 @@ public class AlarmRule extends BaseCreateBy {
      * 备注
      */
     private String remark;
+
+    /**
+     * 脚本内容
+     */
+    private String ruleContent;
+
+    /**
+     * 关联点位集合
+     */
+    List<String> pointIds;
 
 }
