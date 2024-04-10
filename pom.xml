@@ -76,6 +76,7 @@
         <module>cii-csa-ws</module>
         <module>cii-csa-schedule</module>
         <module>cii-auth-spring-boot-starter</module>
+        <module>cii-license-core</module>
     </modules>
 
     <packaging>pom</packaging>
