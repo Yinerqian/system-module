@@ -9,6 +9,7 @@ import lombok.Getter;
 @Getter
 public enum DataTypeEnum implements BaseEnum {
 
+    SHORT("short", "短整型"),
     INTEGER("int", "整型"),
     DECIMAL("decimal", "小数"),
     BOOLEAN("boolean", "布尔"),
