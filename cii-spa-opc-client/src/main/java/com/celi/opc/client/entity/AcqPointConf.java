@@ -1,7 +1,7 @@
 package com.celi.opc.client.entity;
 
 import cn.hutool.core.util.StrUtil;
-import com.celi.cii.base.enums.DataTypeEnum;
+import com.celi.opc.client.enums.DataTypeEnum;
 import lombok.Data;
 
 /**
@@ -28,7 +28,9 @@ public class AcqPointConf {
 
     private Double publishingInterval;
 
+    private String identifier;
+
     public String getIdentifier() {
-        return StrUtil.format("{}.{}.{}", channel, device, db);
+        return this.identifier == null ? StrUtil.format("{}.{}.{}", channel, device, db) : this.identifier;
     }
 }

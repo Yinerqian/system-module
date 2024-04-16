@@ -2,13 +2,10 @@ package com.celi.opc.client.server;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.map.MapUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.celi.opc.client.cert.KeyStoreLoader;
 import com.celi.opc.client.common.SubscriptionCallback;
-import com.celi.opc.client.entity.AcqPointConf;
-import com.celi.opc.client.entity.ReadParams;
-import com.celi.opc.client.entity.ServerInfo;
-import com.celi.opc.client.entity.TreeNode;
+import com.celi.opc.client.entity.*;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
@@ -30,9 +27,12 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.UInteger;
 import org.eclipse.milo.opcua.stack.core.types.enumerated.TimestampsToReturn;
 import org.eclipse.milo.opcua.stack.core.types.structured.EndpointDescription;
 import org.eclipse.milo.opcua.stack.core.types.structured.ReadValueId;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -53,14 +53,14 @@ public class OpcUaClientConfig {
 
     private final Map<Double, ManagedSubscription> subscriptionMap = new HashMap<>();
 
-    @Value("${opc.client.nameSpaceId}")
-    private Integer nameSpaceId;
+    @Autowired
+    private ServerProperties serverProperties;
 
-    private String opcUrl = "opc.tcp://milo.digitalpetri.com:62541/milo";
+    @Autowired
+    private ClientProperties clientProperties;
 
-    private String buildServerAddress(ServerInfo serverInfo) {
-        return String.format("opc.tcp://%s:%s", serverInfo.getServerIp(), serverInfo.getServerPort());
-    }
+    @Autowired
+    private KeyStoreLoader keyStoreLoader;
 
     public boolean isActive() {
         if (this.opcUaClient == null) {
@@ -78,9 +78,21 @@ public class OpcUaClientConfig {
         return true;
     }
 
-    public void connect(ServerInfo serverInfo) {
+    public void connect() {
         try {
-            OpcUaClient client = OpcUaClient.create(opcUrl,
+            KeyStoreLoader loader = null;
+           if (StrUtil.isNotEmpty(clientProperties.getKeyPassword())) {
+               Path securityTempDir = Paths.get(clientProperties.getCertPath(), "security");
+
+               Files.createDirectories(securityTempDir);
+               if (!Files.exists(securityTempDir)) {
+                   log.error("无法创建安全证书目录: " + securityTempDir);
+                   return;
+               }
+              loader = keyStoreLoader.load(securityTempDir);
+           }
+
+            OpcUaClient client = OpcUaClient.create(serverProperties.getEndpointUrl(),
                     new Function<List<EndpointDescription>, Optional<EndpointDescription>>() {
                         @Override
                         public Optional<EndpointDescription> apply(List<EndpointDescription> endpointDescriptions) {
@@ -88,9 +100,8 @@ public class OpcUaClientConfig {
                                 return e.getSecurityPolicyUri().equals(SecurityPolicy.None.getUri()); // 安全策略，默认无
                             }).findFirst();
                         }
-                    }, buildOpcClientConfig(serverInfo));
+                    }, buildOpcClientConfig(loader));
             client.connect().get();
-//            client.getSubscriptionManager().addSubscriptionListener(new OpcUaCustomSubScriptionListener(serverInfo.getServerId(), this));
             this.opcUaClient = client;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -99,16 +110,16 @@ public class OpcUaClientConfig {
 
     /**
      * 读取节点数据
-     * @param readParams
+     * @param identifier
      * @return
      */
-    public String readData(ReadParams readParams) {
-        NodeId nodeId = new NodeId(readParams.getNameSpaceId(), readParams.getIdentifier());
+    public String readData(String identifier) {
+        NodeId nodeId = new NodeId(serverProperties.getNameSpaceIndex(), identifier);
         try {
             DataValue value = this.opcUaClient.readValue(0.0, TimestampsToReturn.Neither, nodeId).get();
             return String.valueOf(value.getValue().getValue());
         } catch (Exception e) {
-            log.error("读取节点：{} 数据失败，{}", readParams.getIdentifier(), e.getMessage());
+            log.error("读取节点：{} 数据失败，{}", identifier, e.getMessage());
         }
         return null;
     }
@@ -132,9 +143,8 @@ public class OpcUaClientConfig {
                     subscription = ManagedSubscription.create(this.opcUaClient, publishingInterval);
                     subscriptionMap.put(publishingInterval, subscription);
                 }
-                //NodeId nodeId = new NodeId(nameSpaceId, acqPointConf.getIdentifier());
-                NodeId nodeId2 = new NodeId(2, "Dynamic/RandomInt64");
-                ManagedDataItem dataItem = subscription.createDataItem(nodeId2);
+                NodeId nodeId = new NodeId(serverProperties.getNameSpaceIndex(), acqPointConf.getIdentifier());
+                ManagedDataItem dataItem = subscription.createDataItem(nodeId);
                 dataItem.addDataValueListener(new Consumer<DataValue>() {
                     @Override
                     public void accept(DataValue dataValue) {
@@ -154,10 +164,9 @@ public class OpcUaClientConfig {
     /**
      * 取消订阅
      * @param pointConfs
-     * @param readParams
      * @return
      */
-    public Boolean cancelSubscriptionEvent(List<AcqPointConf> pointConfs, ReadParams readParams) {
+    public Boolean cancelSubscriptionEvent(List<AcqPointConf> pointConfs) {
         if (CollectionUtil.isEmpty(pointConfs)) {
             return true;
         }
@@ -211,17 +220,20 @@ public class OpcUaClientConfig {
         log.info("OPCUA断开连接");
     }
 
-    private Function<OpcUaClientConfigBuilder, org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfig> buildOpcClientConfig(ServerInfo serverInfo) {
+    private Function<OpcUaClientConfigBuilder, org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfig> buildOpcClientConfig(KeyStoreLoader loader) {
         return new Function<OpcUaClientConfigBuilder, org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfig>() {
             @Override
             public org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfig apply(OpcUaClientConfigBuilder opcUaClientConfigBuilder) {
-                opcUaClientConfigBuilder.setApplicationName(LocalizedText.english(serverInfo.getServerCode()))
-                        .setApplicationUri("urn:eclipse:milo:examples:client")
+                opcUaClientConfigBuilder.setApplicationName(LocalizedText.english(clientProperties.getAppName()))
+                        .setApplicationUri(clientProperties.getAppUri())
                         .setRequestTimeout(UInteger.valueOf(5000));
-                if (StrUtil.isBlank(serverInfo.getUserName()) || StrUtil.isBlank(serverInfo.getPassword())) {
+                if (loader != null) {
+                    opcUaClientConfigBuilder.setCertificate(loader.getClientCertificate()).setKeyPair(loader.getClientKeyPair());
+                }
+                if (StrUtil.isBlank(serverProperties.getIdpUsername()) || StrUtil.isBlank(serverProperties.getIdpPassword())) {
                     opcUaClientConfigBuilder.setIdentityProvider(new AnonymousProvider());
                 } else {
-                    opcUaClientConfigBuilder.setIdentityProvider(new UsernameProvider(serverInfo.getUserName(), serverInfo.getPassword()));
+                    opcUaClientConfigBuilder.setIdentityProvider(new UsernameProvider(serverProperties.getIdpUsername(), serverProperties.getIdpPassword()));
                 }
                 return opcUaClientConfigBuilder.build();
             }
