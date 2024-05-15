@@ -1,11 +1,18 @@
 package com.celi.license.utils;
 
 import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.util.ClassLoaderUtil;
+import cn.hutool.core.util.StrUtil;
 
 import javax.crypto.Cipher;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Base64;
@@ -27,6 +34,23 @@ public class SignUtils {
     public static KeyStore loadKeyStore(String keyName, char[] keystorePassword) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("JKS");
         try (InputStream inputStream = ResourceUtil.getStream(keyName)) {
+            keyStore.load(inputStream, keystorePassword);
+        }
+        return keyStore;
+    }
+
+    public static KeyStore loadKeyStore(String keyName, char[] keystorePassword, Charset charset) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance("JKS");
+        try (BufferedReader bufferedReader = ResourceUtil.getReader(keyName, charset);
+             InputStream inputStream = new ByteArrayInputStream(bufferedReader.readLine().getBytes());) {
+            keyStore.load(inputStream, keystorePassword);
+        }
+        return keyStore;
+    }
+
+    public static KeyStore loadKeyStore(String keyName, char[] keystorePassword, Class<?> baseClass) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance("JKS");
+        try (InputStream inputStream = ResourceUtil.getResource(keyName).openStream()) {
             keyStore.load(inputStream, keystorePassword);
         }
         return keyStore;

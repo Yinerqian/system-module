@@ -20,6 +20,8 @@ public class LicenseBean {
     private Integer maxDevice;
     // 最大点位
     private Integer maxTag;
-    // 过期时间
+    // 过期时间 为-1表示长期有效
     private Long expireDate;
+    // 宽限时间 单位天
+    private Integer reduceDay;
 }

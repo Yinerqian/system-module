@@ -23,9 +23,9 @@ import static com.celi.license.utils.SignUtils.*;
 public class SecurityUtils {
 
     private static String OS = System.getProperty("os.name").toLowerCase();
+    public static AbstractServerInfos serverInfos = null;
 
-    public static LicenseBean generateDeviceInfo() {
-        AbstractServerInfos serverInfos = null;
+    static {
         if (OS.indexOf("windows") >= 0) {
             // windows
             serverInfos = new WindowsServerInfos();
@@ -33,6 +33,9 @@ public class SecurityUtils {
             // linux
             serverInfos = new LinuxServerInfos();
         }
+    }
+
+    public static LicenseBean generateDeviceInfo() {
         LicenseBean licenseBean = new LicenseBean();
         try {
             licenseBean.setMac(serverInfos.getMacAddress().stream().findFirst().get());
