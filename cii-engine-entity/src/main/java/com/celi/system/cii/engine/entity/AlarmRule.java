@@ -33,14 +33,23 @@ public class AlarmRule extends BaseCreateBy {
     private String ruleName;
 
     /**
-     * 规则等级id
+     * 告警规则编码
      */
+    private String ruleCode;
+
+    /**
+     * 规则等级id
     private String ruleLevelId;
 
     /**
      * 规则模式 1-基础模式 2-高级模式
      */
     private Integer ruleMode;
+
+    /**
+     * 告警次数
+     */
+    private Integer alarmCount;
 
     /**
      * 是否开启防抖 1-开启 0-不开启
@@ -81,5 +90,10 @@ public class AlarmRule extends BaseCreateBy {
      * 关联点位集合
      */
     List<String> pointIds;
+
+    /**
+     * 状态 0-停用 1-启用
+     */
+    private String status;
 
 }
