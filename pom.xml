@@ -61,7 +61,7 @@
         <junit.version>4.13</junit.version>
         <junit-jupiter.version>5.6.2</junit-jupiter.version>
         <hutool.version>5.7.3</hutool.version>
-        <revision>2.1.5</revision>
+        <revision>2.1.6</revision>
     </properties>
 
     <modules>
@@ -77,6 +77,7 @@
         <module>cii-csa-schedule</module>
         <module>cii-auth-spring-boot-starter</module>
         <module>cii-license-core</module>
+        <module>cii-csa-license-starter</module>
     </modules>
 
     <packaging>pom</packaging>
