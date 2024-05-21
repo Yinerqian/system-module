@@ -5,7 +5,9 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.celi.cii.common.exception.AuthenticationException;
+import com.celi.cii.common.exception.ServiceException;
 import com.celi.system.constant.SystemConstants;
 import com.celi.system.crypto.BCryptPasswordEncoder;
 import com.celi.system.dao.UserRepository;
@@ -15,6 +17,7 @@ import com.celi.system.enums.PermissionTypeEnum;
 import com.celi.system.enums.ServiceCode;
 import com.celi.system.enums.UserStatusEnum;
 import com.celi.system.utils.DateUtils;
+import com.celi.system.utils.PwdSecurityKey;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -46,23 +49,22 @@ public class OAuthService {
     public void userLogin(UserLoginEntity userLoginEntity) {
         User userInfo = userRepository.findUserByLoginName(userLoginEntity.getUserName());
         if (null == userInfo) {
-            throw new AuthenticationException(ServiceCode.UNKNOWN_USER.getMessage());
+            throw new ServiceException(ServiceCode.UNKNOWN_USER.getMessage());
         }
 
         if (userInfo.getDisabled() == UserStatusEnum.DISABLED) {
-            throw new AuthenticationException("用户已被禁用，请联系管理员");
+            throw new ServiceException("用户已被禁用，请联系管理员");
         }
 
         if (ObjectUtil.isNotNull(userInfo.getExpired())) {
             if (DateUtil.date().isAfter(userInfo.getExpired())) {
-                throw new AuthenticationException("用户已过期，请联系管理员");
+                throw new ServiceException("用户已过期，请联系管理员");
             }
         }
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        boolean isPasswordCorrect = encoder.matches(userLoginEntity.getPassword(), userInfo.getPassword());
+        String pwd = PwdSecurityKey.decryptPwd(userInfo.getPassword());
+        boolean isPasswordCorrect = StrUtil.equals(pwd, userLoginEntity.getPassword());
         if (!isPasswordCorrect) {
-            throw new AuthenticationException(ServiceCode.CHECK_INPUT_PASSWORD.getMessage());
+            throw new ServiceException(ServiceCode.CHECK_INPUT_PASSWORD.getMessage());
         }
         userInfo.setLastLoginDate(DateUtils.now());
         userRepository.save(userInfo);
