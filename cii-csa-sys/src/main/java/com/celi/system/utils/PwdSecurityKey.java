@@ -15,7 +15,7 @@ public class PwdSecurityKey {
     }
 
     public static String encryptionPwd(String plainText) {
-        return SaSecureUtil.aesEncrypt(SECURITY_KEY, SaSecureUtil.md5(SaSecureUtil.md5(plainText)));
+        return SaSecureUtil.aesEncrypt(SECURITY_KEY, plainText);
     }
 
     public static void main(String[] args) {

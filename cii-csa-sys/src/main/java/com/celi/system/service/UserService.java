@@ -2,6 +2,7 @@ package com.celi.system.service;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.celi.cii.common.dto.PageInfo;
@@ -173,8 +174,9 @@ public class UserService {
         }
         User userInfo = userRepository.findByUserId(user.getUserId());
         int value = 0;
-        if (user.getOldPassword().equals(PwdSecurityKey.decryptPwd(userInfo.getPassword()))) {
-            userInfo.setPassword(PwdSecurityKey.encryptionPwd(user.getNewPassword()));
+        String oldPwd = SaSecureUtil.md5(SaSecureUtil.md5(user.getOldPassword()));
+        if (oldPwd.equals(PwdSecurityKey.decryptPwd(userInfo.getPassword()))) {
+            userInfo.setPassword(PwdSecurityKey.encryptionPwd(SaSecureUtil.md5(SaSecureUtil.md5(user.getNewPassword()))));
             userInfo.setUpdatedBy(StpUtil.getLoginIdAsString());
             userInfo.setUpdatedTime(DateUtils.now());
             User save = userRepository.save(userInfo);
@@ -186,6 +188,15 @@ public class UserService {
             return value;
         }
         return value;
+    }
+
+    //重置密码
+    public void resetPassword(User user) {
+        User userInfo = userRepository.findByUserId(user.getUserId());
+        userInfo.setUpdatedBy(StpUtil.getLoginIdAsString());
+        userInfo.setUpdatedTime(DateUtils.now());
+        userInfo.setPassword(PwdSecurityKey.encryptionPwd(SaSecureUtil.md5(SaSecureUtil.md5("123456"))));
+        userRepository.save(userInfo);
     }
 
 }

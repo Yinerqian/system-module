@@ -56,4 +56,10 @@ public class SysUserController {
         }
         return ResponseDTO.errorMessage("旧密码不正确，请重新输入");
     }
+
+    @PutMapping("/resetPassword")
+    public ResponseDTO resetPassword(@RequestBody User user){
+        userService.resetPassword(user);
+        return ResponseDTO.ok();
+    }
 }
