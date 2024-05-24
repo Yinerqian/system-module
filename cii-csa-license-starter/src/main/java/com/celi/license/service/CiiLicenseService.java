@@ -37,7 +37,10 @@ public class CiiLicenseService {
     private LicenseConfig licenseConfig;
 
     @PostConstruct
+    @Transactional
     public void init() throws Exception {
+        // 程序启动判断是否需要创建license表
+        createLicense(null);
         // 程序启动是是否判断
         if (!licenseConfig.getCheckOnStartUp()) {
             return;
@@ -52,10 +55,13 @@ public class CiiLicenseService {
     @Transactional
     public void createLicense(String licenseContent) {
         CiiLicense license = new CiiLicense();
-        license.setId("1");
-        license.setLicenseTs(Base64Encoder.encode(String.valueOf(System.currentTimeMillis() - DEFAULT_TIME)));
-        license.setLicenseContent(licenseContent);
-        ciiLicenseDao.save(license);
+        Optional<CiiLicense> licenseOptional = ciiLicenseDao.findById("1");
+        if (!licenseOptional.isPresent()) {
+            license.setId("1");
+            license.setLicenseTs(Base64Encoder.encode(String.valueOf(System.currentTimeMillis() - DEFAULT_TIME)));
+            license.setLicenseContent(licenseContent);
+            ciiLicenseDao.save(license);
+        }
     }
 
     public void checkLicense(Boolean isStart) throws Exception {
