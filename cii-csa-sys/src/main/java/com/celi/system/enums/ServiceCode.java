@@ -3,7 +3,7 @@ package com.celi.system.enums;
 public enum ServiceCode {
     SUCCESS(0, "success"),
     UNKNOWN_FAILURE(1, "服务内部接口调用异常"),
-    UNKNOWN_USER(2, "未找到用户"),
+    UNKNOWN_USER(2, "请检查您的用户名或密码是否正确"),
     UNAUTHORIZED(3, "权限不足"),
     SAME_LOGIN_NAME_USER(4, "账号已存在"),
     SAME_PERMISSION_NAME(5, "权限名称重复"),
@@ -21,7 +21,7 @@ public enum ServiceCode {
     DEPT_HAS_CHILDREN(2004, "该机构存在子机构不可删除"),
     PERMISSION_HAS_CHILDREN(2005, "该权限存在子权限不可删除"),
     USER_DISABLED(40001, "该用户无法使用"),
-    CHECK_INPUT_PASSWORD(4001, "请检查输入的密码是否正确"),
+    CHECK_INPUT_PASSWORD(4001, "请检查您的用户名或密码是否正确"),
     AUTHENTICATION_FAILED(401, "AUTHENTICATION FAILED"),
 
     ;
