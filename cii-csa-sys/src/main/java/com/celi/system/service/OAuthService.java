@@ -134,14 +134,14 @@ public class OAuthService {
         String userId = StpUtil.getLoginIdAsString();
         List<UserRole> userRoles = userRoleService.findRoleIds(userId);
         if (CollectionUtils.isEmpty(userRoles)) {
-            throw new AuthenticationException("用户未配置权限，请联系管理员");
+            throw new ServiceException("用户未配置权限，请联系管理员");
         }
         // 该用户所有的角色ID
         List<String> userRoleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
         // 根据角色ID查询所有的权限
         List<RolePermission> rolePermissions = rolePermissionService.queryByRoleIds(userRoleIds);
         if (CollectionUtils.isEmpty(rolePermissions)) {
-            throw new AuthenticationException("用户未配置权限，请联系管理员");
+            throw new ServiceException("用户未配置权限，请联系管理员");
         }
         return rolePermissions;
     }
