@@ -55,7 +55,7 @@ public class PermissionService {
     }
 
 
-    public Permission findByGroupId(String groupId){
+    public List<Permission> findByGroupId(String groupId){
         return permissionRepository.findByGroupId(groupId);
     }
 
