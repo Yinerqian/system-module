@@ -24,7 +24,7 @@ public interface PermissionRepository extends JpaRepository<Permission, String> 
 
     Permission findPermissionByPermissionId(String permissionId);
 
-    Permission findByGroupId(String groupId);
+    List<Permission> findByGroupId(String groupId);
 
     void deleteByPermissionId(String permissionId);
 

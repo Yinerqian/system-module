@@ -145,6 +145,7 @@ public class UserService {
         user.setInitPasswordFlag(0);
         user.setCanDelFlag(1);      // 是否能删除，默认1，可以删除
         user.setOnlineStatus(0);        // 在线状态: 1-在线，0 离线
+        user.setDelFlag(0); //设置默认为0
         return user;
     }
 
