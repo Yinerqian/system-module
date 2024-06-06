@@ -200,4 +200,17 @@ public class UserService {
         userRepository.save(userInfo);
     }
 
+    /**
+     * 查询该角色下有哪些用户
+     * @param roleId
+     * @return
+     */
+    public List<User> findUserByRoleId(String roleId) {
+        return userRepository.findUserByRoleId(roleId);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
 }

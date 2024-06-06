@@ -4,6 +4,8 @@ import com.celi.system.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,5 +29,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     void deleteByUserId(String userId);
 
     List<User> findAllByUserIdIn(List<String> userIds);
+
+    @Query(value = "SELECT su.* FROM sys_user_role sur LEFT JOIN sys_user su ON sur.USER_ID = su.USER_ID WHERE sur.ROLE_ID = :roleId", nativeQuery = true)
+    List<User> findUserByRoleId(@Param("roleId") String roleId);
 
 }
