@@ -39,6 +39,7 @@ public class AlarmRule extends BaseCreateBy {
 
     /**
      * 规则等级id
+     */
     private String ruleLevelId;
 
     /**
